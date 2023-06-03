@@ -121,5 +121,19 @@ public class StableDiffusion
 
         return result!;
     }
+
+    public async Task<IImageToImageResult> Image2Image(ImageToImageConfig config)
+    {
+        var request = new ImageToImageConfigRequest(config);
+
+        var response = await _httpClient.PostAsJsonAsync("/sdapi/v1/img2img", request, _serializerOptions);
+
+        var result = await response
+                          .EnsureSuccessStatusCode()
+                          .Content
+                          .ReadFromJsonAsync<ImageToImageResultResponse>(_serializerOptions);
+
+        return result!;
+    }
     #endregion
 }

@@ -5,23 +5,18 @@ namespace Autofocus.Models;
 
 public class Base64EncodedImage
 {
-    internal readonly byte[] Data;
+    internal readonly byte[] _data;
 
-    internal Base64EncodedImage(byte[] data)
+    public ReadOnlyMemory<byte> Data => _data;
+
+    public Base64EncodedImage(byte[] data)
     {
-        Data = data;
+        _data = data;
     }
 
-    public Image ToImage()
+    public string Base64()
     {
-        return Image.Load(new MemoryStream(Data));
-    }
-
-    public static Base64EncodedImage FromImage(Image image)
-    {
-        var stream = new MemoryStream();
-        image.SaveAsPng(stream);
-        return new Base64EncodedImage(stream.ToArray());
+        return Convert.ToBase64String(_data);
     }
 }
 
@@ -35,6 +30,6 @@ internal class Base64EncodedImageConverter
 
     public override void Write(Utf8JsonWriter writer, Base64EncodedImage value, JsonSerializerOptions options)
     {
-        writer.WriteBase64StringValue(value.Data);
+        writer.WriteBase64StringValue(value.Data.Span);
     }
 }

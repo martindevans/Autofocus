@@ -12,18 +12,14 @@ public record TextToImageConfig
     public required uint Height { get; set; }
     public bool Tiling { get; set; }
 
-    public int? Seed { get; set; }
-    public int? SubSeed { get; set; }
-    public double? SubseedStrength { get; set; }
-    public uint? SeedResizeFromWidth { get; set; }
-    public uint? SeedResizeFromHeight { get; set; }
+    public required SeedConfig Seed { get; set; }
 
-    public ISampler? Sampler { get; set; }
+    public required ISampler Sampler { get; set; }
     public int? SamplingSteps { get; set; }
     public double? CfgScale { get; set; }
     public double? Eta { get; set; }
 
-    public IStableDiffusionModel? Model { get; set; }
+    public required IStableDiffusionModel Model { get; set; }
 
     public int? BatchSize { get; set; }
     public int? Batches { get; set; }
@@ -146,13 +142,13 @@ internal class TextToImageConfigRequest
         Height = config.Height;
         Width = config.Width;
         Tiling = config.Tiling;
-        Seed = config.Seed;
-        SubSeed = config.SubSeed;
-        SubSeedStrength = (float?)config.SubseedStrength;
-        SeedResizeFromWidth = config.SeedResizeFromWidth;
-        SeedResizeFromHeight = config.SeedResizeFromHeight;
+        Seed = config.Seed.Seed;
+        SubSeed = config.Seed.SubSeed;
+        SubSeedStrength = (float?)config.Seed.SubseedStrength;
+        SeedResizeFromWidth = config.Seed.SeedResizeFromWidth;
+        SeedResizeFromHeight = config.Seed.SeedResizeFromHeight;
         SamplingSteps = config.SamplingSteps;
-        SamplerName = config.Sampler?.Name;
+        SamplerName = config.Sampler.Name;
         CfgScale = (float?)config.CfgScale;
         Eta = (float?)config.Eta;
         Batches = config.Batches;
@@ -168,8 +164,6 @@ internal class TextToImageConfigRequest
         }
 
         RestoreAfterOverrides = true;
-        var model = config.Model?.Title;
-        if (model != null)
-            OverrideSettings.Add("sd_model_checkpoint", model);
+        OverrideSettings.Add("sd_model_checkpoint", config.Model.Title);
     }
 }

@@ -5,7 +5,6 @@ namespace Autofocus.Models;
 public interface ITextToImageResult
 {
     public IReadOnlyList<Base64EncodedImage> Images { get; }
-
     public ITextToImageResultParameters Parameters { get; }
 }
 
