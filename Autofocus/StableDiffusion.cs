@@ -1,6 +1,5 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Autofocus.Models;
 
 namespace Autofocus;
@@ -32,7 +31,7 @@ public class StableDiffusion
         return (await _httpClient.GetFromJsonAsync<ProgressResponse>("/sdapi/v1/progress?skip_current_image=false", _serializerOptions))!;
     }
 
-
+    #region sampler
     public async Task<IEnumerable<ISampler>> Samplers()
     {
         return (await _httpClient.GetFromJsonAsync<SamplerResponse[]>("/sdapi/v1/samplers", _serializerOptions))!;
@@ -43,14 +42,29 @@ public class StableDiffusion
         var samplers = await Samplers();
         return samplers.FirstOrDefault(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
+    #endregion
 
-
+    #region upscaler
     public async Task<IEnumerable<IUpscaler>> Upscalers()
     {
         return (await _httpClient.GetFromJsonAsync<UpscalerResponse[]>("/sdapi/v1/upscalers", _serializerOptions))!;
     }
 
+    public async Task<IUpscaler?> Upscaler(string name)
+    {
+        var models = await Upscalers();
+        return models.FirstOrDefault(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+    }
+    #endregion
 
+    #region style
+    public async Task<IEnumerable<IPromptStyle>> Styles()
+    {
+        return (await _httpClient.GetFromJsonAsync<PromptStyleResponse[]>("/sdapi/v1/prompt-styles", _serializerOptions))!;
+    }
+    #endregion
+
+    #region SD models
     public async Task<IEnumerable<IStableDiffusionModel>> StableDiffusionModels()
     {
         return (await _httpClient.GetFromJsonAsync<StableDiffusionModelResponse[]>("/sdapi/v1/sd-models", _serializerOptions))!;
@@ -61,20 +75,23 @@ public class StableDiffusion
         var models = await StableDiffusionModels();
         return models.FirstOrDefault(a => a.ModelName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
+    #endregion
 
-
+    #region embeddings
     public async Task<IEmbeddings> Embeddings()
     {
         return (await _httpClient.GetFromJsonAsync<EmbeddingsResponse>("/sdapi/v1/embeddings", _serializerOptions))!;
     }
+    #endregion
 
-
+    #region memory
     public async Task<IMemory> Memory()
     {
         return (await _httpClient.GetFromJsonAsync<MemoryResponse>("/sdapi/v1/memory", _serializerOptions))!;
     }
+    #endregion
 
-
+    #region PNG Info
     public async Task<IPngInfo> PngInfo(Base64EncodedImage image)
     {
         var request = new PngInfoRequest(image);
@@ -88,8 +105,9 @@ public class StableDiffusion
 
         return result!;
     }
+    #endregion
 
-
+    #region Text2Image
     public async Task<ITextToImageResult> TextToImage(TextToImageConfig config)
     {
         var request = new TextToImageConfigRequest(config);
@@ -103,4 +121,5 @@ public class StableDiffusion
 
         return result!;
     }
+    #endregion
 }

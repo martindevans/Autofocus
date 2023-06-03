@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections;
+using System.Text.Json.Serialization;
 
 namespace Autofocus.Models;
 
@@ -6,6 +7,7 @@ public interface IEmbeddings
 {
     public IReadOnlyDictionary<string, IEmbedding> Loaded { get; }
     public IReadOnlyDictionary<string, IEmbedding> Skipped { get; }
+    public IReadOnlyDictionary<string, IEmbedding> All { get; }
 }
 
 public interface IEmbedding
@@ -27,6 +29,7 @@ internal class EmbeddingsResponse
 
     private IReadOnlyDictionary<string, IEmbedding>? _loaded;
     private IReadOnlyDictionary<string, IEmbedding>? _skipped;
+    private IReadOnlyDictionary<string, IEmbedding>? _all;
 
     IReadOnlyDictionary<string, IEmbedding> IEmbeddings.Loaded
     {
@@ -42,6 +45,14 @@ internal class EmbeddingsResponse
         {
             Load();
             return _skipped!;
+        }
+    }
+    IReadOnlyDictionary<string, IEmbedding> IEmbeddings.All
+    {
+        get
+        {
+            Load();
+            return _all!;
         }
     }
 
@@ -62,6 +73,13 @@ internal class EmbeddingsResponse
                 d.Add(key, value.Bind(key));
             _skipped = d;
         }
+
+        var all = new Dictionary<string, IEmbedding>();
+        _all = all;
+        foreach (var (k, v) in _loaded)
+            all.Add(k, v);
+        foreach (var (k, v) in _skipped)
+            all.Add(k, v);
     }
 }
 
