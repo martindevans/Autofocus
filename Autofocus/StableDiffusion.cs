@@ -11,6 +11,11 @@ public class StableDiffusion
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _serializerOptions;
 
+    public StableDiffusion(string? address = null)
+        : this(address == null ? null : new Uri(address))
+    {
+    }
+
     public StableDiffusion(Uri? address = null)
     {
         _httpClient = new HttpClient();
