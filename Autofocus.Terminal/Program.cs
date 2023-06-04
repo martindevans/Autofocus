@@ -10,10 +10,7 @@ Console.WriteLine("Generating");
 var txt2img = await api.TextToImage(
     new()
     {
-        Seed = new()
-        {
-            Seed = 16
-        },
+        Seed = 16,
 
         Prompt = new()
         {

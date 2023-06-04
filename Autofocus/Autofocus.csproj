@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Autofocus</Title>
+    <Authors>Martin Evans</Authors>
+    <Description>Automatic1111 API Wrapper</Description>
+    <PackageProjectUrl>https://github.com/martindevans/Autofocus</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>
