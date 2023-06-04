@@ -1,25 +1,18 @@
 ﻿using System.Text.Json.Serialization;
+using Autofocus.Models;
 
-namespace Autofocus.Models;
+namespace Autofocus.Config;
 
 public record TextToImageConfig
 {
-    public required string Prompt { get; init; }
-    public required string NegativePrompt { get; init; }
-    public List<IPromptStyle> Styles { get; init; } = new();
+    public required PromptConfig Prompt { get; set; }
+    public required SeedConfig Seed { get; set; }
+    public required SamplerConfig Sampler { get; set; }
+    public required IStableDiffusionModel Model { get; set; }
 
     public required uint Width { get; set; }
     public required uint Height { get; set; }
     public bool Tiling { get; set; }
-
-    public required SeedConfig Seed { get; set; }
-
-    public required ISampler Sampler { get; set; }
-    public int? SamplingSteps { get; set; }
-    public double? CfgScale { get; set; }
-    public double? Eta { get; set; }
-
-    public required IStableDiffusionModel Model { get; set; }
 
     public int? BatchSize { get; set; }
     public int? Batches { get; set; }
@@ -136,9 +129,9 @@ internal class TextToImageConfigRequest
 
     public TextToImageConfigRequest(TextToImageConfig config)
     {
-        Prompt = config.Prompt;
-        NegativePrompt = config.NegativePrompt;
-        Styles = config.Styles.Select(a => a.Name).ToArray();
+        Prompt = config.Prompt.Positive;
+        NegativePrompt = config.Prompt.Negative;
+        Styles = config.Prompt.Styles.Select(a => a.Name).ToArray();
         Height = config.Height;
         Width = config.Width;
         Tiling = config.Tiling;
@@ -147,10 +140,10 @@ internal class TextToImageConfigRequest
         SubSeedStrength = (float?)config.Seed.SubseedStrength;
         SeedResizeFromWidth = config.Seed.SeedResizeFromWidth;
         SeedResizeFromHeight = config.Seed.SeedResizeFromHeight;
-        SamplingSteps = config.SamplingSteps;
-        SamplerName = config.Sampler.Name;
-        CfgScale = (float?)config.CfgScale;
-        Eta = (float?)config.Eta;
+        SamplingSteps = config.Sampler.SamplingSteps;
+        SamplerName = config.Sampler.Sampler.Name;
+        CfgScale = (float?)config.Sampler.CfgScale;
+        Eta = (float?)config.Sampler.Eta;
         Batches = config.Batches;
         BatcheSize = config.BatchSize;
         RestoreFaces = config.RestoreFaces;

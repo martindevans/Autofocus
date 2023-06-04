@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using System.Xml.Linq;
+using Autofocus.Config;
 using Autofocus.Models;
 
 namespace Autofocus;
@@ -37,10 +39,10 @@ public class StableDiffusion
         return (await _httpClient.GetFromJsonAsync<SamplerResponse[]>("/sdapi/v1/samplers", _serializerOptions))!;
     }
 
-    public async Task<ISampler?> Sampler(string name)
+    public async Task<ISampler> Sampler(string name)
     {
         var samplers = await Samplers();
-        return samplers.FirstOrDefault(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        return samplers.Single(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
     #endregion
 
@@ -50,10 +52,10 @@ public class StableDiffusion
         return (await _httpClient.GetFromJsonAsync<UpscalerResponse[]>("/sdapi/v1/upscalers", _serializerOptions))!;
     }
 
-    public async Task<IUpscaler?> Upscaler(string name)
+    public async Task<IUpscaler> Upscaler(string name)
     {
         var models = await Upscalers();
-        return models.FirstOrDefault(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        return models.Single(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
     #endregion
 
@@ -61,6 +63,12 @@ public class StableDiffusion
     public async Task<IEnumerable<IPromptStyle>> Styles()
     {
         return (await _httpClient.GetFromJsonAsync<PromptStyleResponse[]>("/sdapi/v1/prompt-styles", _serializerOptions))!;
+    }
+
+    public async Task<IPromptStyle> Style(string name)
+    {
+        var styles = await Styles();
+        return styles.Single(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
     #endregion
 
@@ -70,10 +78,10 @@ public class StableDiffusion
         return (await _httpClient.GetFromJsonAsync<StableDiffusionModelResponse[]>("/sdapi/v1/sd-models", _serializerOptions))!;
     }
 
-    public async Task<IStableDiffusionModel?> StableDiffusionModel(string name)
+    public async Task<IStableDiffusionModel> StableDiffusionModel(string name)
     {
         var models = await StableDiffusionModels();
-        return models.FirstOrDefault(a => a.ModelName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        return models.Single(a => a.ModelName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
     #endregion
 

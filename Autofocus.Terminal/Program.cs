@@ -3,10 +3,8 @@ using Autofocus.Terminal.Extensions;
 
 var api = new StableDiffusion();
 
-var sampler  = await api.Sampler("DPM++ SDE") ?? throw new InvalidOperationException("no sampler");
-var model    = await api.StableDiffusionModel("cardosAnime_v20") ?? throw new InvalidOperationException("no model");
-var upscaler = await api.Upscaler("Lanczos") ?? throw new InvalidOperationException("no upscaler");
-var style = (await api.Styles()).FirstOrDefault(a => a.Name.Equals("BWphoto")) ?? throw new InvalidOperationException("no style");
+var model = await api.StableDiffusionModel("cardosAnime_v20");
+var sampler = await api.Sampler("DPM++ SDE");
 
 Console.WriteLine("Generating");
 var txt2img = await api.TextToImage(
@@ -16,28 +14,33 @@ var txt2img = await api.TextToImage(
         {
             Seed = 16
         },
-        Prompt = "1girl, backpack, outdoors, mountains, sunny, frilled_skirt, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, (standing_on_one:1.25), thighhighs",
-        NegativePrompt = "easynegative, badhandv4, nsfw",
-        Styles = {
-            style,
+
+        Prompt = new()
+        {
+            Positive = "1girl, backpack, outdoors, mountains, sunny, frilled_skirt, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, (standing_on_one:1.25), thighhighs",
+            Negative = "easynegative, badhandv4, nsfw",
+            Styles = {
+                await api.Style("BWphoto"),
+            }
         },
 
-        Sampler = sampler,
-        SamplingSteps = 10,
-        Model = model,
+        Sampler = new()
+        {
+            Sampler = sampler,
+            SamplingSteps = 10,
+        },
 
+        Model = model,
         BatchSize = 1,
         Batches = 1,
-
         RestoreFaces = true,
-
         Height = 512,
         Width = 512,
 
         //HighRes = new()
         //{
         //    DenoisingStrength = 0.5,
-        //    Upscaler = upscaler,
+        //    Upscaler = await api.Upscaler("Lanczos"),
 
         //    Width = 512,
         //    Height = 512,
@@ -62,13 +65,26 @@ var img2img = await api.Image2Image(
             txt2img.Images[0]
         },
 
-        Prompt = "1boy, (adult), backpack, outdoors, mountains, sunny, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, (standing_on_one:1.25)",
-        NegativePrompt = "easynegative, badhandv4, nsfw, child",
+        Prompt = new()
+        {
+            Positive = "1boy, (adult), backpack, outdoors, mountains, sunny, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, (standing_on_one:1.25)",
+            Negative = "easynegative, badhandv4, nsfw, child",
+            Styles =
+            {
+                await api.Style("TellTale")
+            }
+        },
 
         Seed = new()
         {
             Seed = 17,
-        }
+        },
+
+        Sampler = new()
+        {
+            Sampler = sampler,
+            SamplingSteps = 10,
+        },
     }
 );
 
