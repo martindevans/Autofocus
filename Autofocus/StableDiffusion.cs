@@ -12,14 +12,14 @@ public class StableDiffusion
     private readonly JsonSerializerOptions _serializerOptions;
 
     public StableDiffusion(string? address = null)
-        : this(address == null ? null : new Uri(address))
+        : this(address == null ? new Uri("http://127.0.0.1:7860") : new Uri(address))
     {
     }
 
-    public StableDiffusion(Uri? address = null)
+    public StableDiffusion(Uri address)
     {
         _httpClient = new HttpClient();
-        _httpClient.BaseAddress = address ?? new Uri("http://127.0.0.1:7860");
+        _httpClient.BaseAddress = address;
         _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Autofocus Agent");
 
         _serializerOptions = new JsonSerializerOptions()
