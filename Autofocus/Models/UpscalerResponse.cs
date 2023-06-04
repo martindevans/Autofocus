@@ -14,9 +14,9 @@ public interface IUpscaler
 internal class UpscalerResponse
     : IUpscaler
 {
-    [JsonPropertyName("name")] public string Name { get; init; } 
-    [JsonPropertyName("model_name")] public string ModelName { get; init; } 
-    [JsonPropertyName("model_path")] public string ModelPath { get; init; } 
-    [JsonPropertyName("model_url")] public string ModelUrl { get; init; } 
+    [JsonPropertyName("name")] public string Name { get; init; } = null!;
+    [JsonPropertyName("model_name")] public string ModelName { get; init; } = null!;
+    [JsonPropertyName("model_path")] public string ModelPath { get; init; } = null!;
+    [JsonPropertyName("model_url")] public string ModelUrl { get; init; } = null!;
     [JsonPropertyName("scale")] public double Scale { get; init; }
 }

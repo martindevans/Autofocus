@@ -65,6 +65,8 @@ var img2img = await api.Image2Image(
             txt2img.Images[0]
         },
 
+        Model = model,
+
         Prompt = new()
         {
             Positive = "1boy, (adult), backpack, outdoors, mountains, sunny, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, (standing_on_one:1.25)",
