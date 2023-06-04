@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus", "Autofocus\Autofocus.csproj", "{4E1B5B4F-D656-4B12-9411-3FF3D16F950D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus", "Autofocus\Autofocus.csproj", "{4E1B5B4F-D656-4B12-9411-3FF3D16F950D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.Terminal", "Autofocus.Terminal\Autofocus.Terminal.csproj", "{F9D26CBC-D0E9-4A57-A810-47455A2F9A04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.Terminal", "Autofocus.Terminal\Autofocus.Terminal.csproj", "{F9D26CBC-D0E9-4A57-A810-47455A2F9A04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.Tests", "Autofocus.Tests\Autofocus.Tests.csproj", "{B2F96F31-AD22-411E-B3E3-FFC9ECBB01C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F9D26CBC-D0E9-4A57-A810-47455A2F9A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9D26CBC-D0E9-4A57-A810-47455A2F9A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9D26CBC-D0E9-4A57-A810-47455A2F9A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2F96F31-AD22-411E-B3E3-FFC9ECBB01C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2F96F31-AD22-411E-B3E3-FFC9ECBB01C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2F96F31-AD22-411E-B3E3-FFC9ECBB01C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2F96F31-AD22-411E-B3E3-FFC9ECBB01C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
