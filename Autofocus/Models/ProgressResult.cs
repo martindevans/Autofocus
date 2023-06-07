@@ -15,10 +15,10 @@ public interface IProgressState
 {
     public bool Skipped { get; }
     public bool Interrupted { get; }
-    public uint JobCount { get; }
-    public uint JobNum { get; }
-    public uint SamplingStep { get; }
-    public uint SamplingSteps { get; }
+    public int JobCount { get; }
+    public int JobNum { get; }
+    public int SamplingStep { get; }
+    public int SamplingSteps { get; }
 }
 
 internal class ProgressResponse
@@ -40,8 +40,8 @@ internal class ProgressStateResponse
 {
     [JsonPropertyName("skipped")] public bool Skipped { get; init; }
     [JsonPropertyName("interrupted")] public bool Interrupted { get; init; }
-    [JsonPropertyName("job_count")] public uint JobCount { get; init; }
-    [JsonPropertyName("job_no")] public uint JobNum { get; init; }
-    [JsonPropertyName("sampling_step")] public uint SamplingStep { get; init; }
-    [JsonPropertyName("sampling_steps")] public uint SamplingSteps { get; init; }
+    [JsonPropertyName("job_count")] public int JobCount { get; init; }
+    [JsonPropertyName("job_no")] public int JobNum { get; init; }
+    [JsonPropertyName("sampling_step")] public int SamplingStep { get; init; }
+    [JsonPropertyName("sampling_steps")] public int SamplingSteps { get; init; }
 }
