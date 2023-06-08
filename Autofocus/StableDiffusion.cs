@@ -1,6 +1,5 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
-using System.Xml.Linq;
 using Autofocus.Config;
 using Autofocus.Models;
 
@@ -134,7 +133,9 @@ public class StableDiffusion
 
         return result!;
     }
+    #endregion
 
+    #region Image2Image
     public async Task<IImageToImageResult> Image2Image(ImageToImageConfig config)
     {
         var request = new ImageToImageConfigRequest(config);
@@ -145,6 +146,22 @@ public class StableDiffusion
                           .EnsureSuccessStatusCode()
                           .Content
                           .ReadFromJsonAsync<ImageToImageResultResponse>(_serializerOptions);
+
+        return result!;
+    }
+    #endregion
+
+    #region interrogate
+    public async Task<IInterrogateResult> Interrogate(InterrogateConfig config)
+    {
+        var request = new InterrogateConfigRequest(config);
+
+        var response = await _httpClient.PostAsJsonAsync("/sdapi/v1/interrogate", request, _serializerOptions);
+
+        var result = await response
+                          .EnsureSuccessStatusCode()
+                          .Content
+                          .ReadFromJsonAsync<InterrogateResultResponse>(_serializerOptions);
 
         return result!;
     }

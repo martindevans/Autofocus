@@ -109,7 +109,7 @@ internal class ImageToImageConfigRequest
     [JsonPropertyName("eta"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public float? Eta { get; init; }
 
-    [JsonPropertyName("denoising_strength")]
+    [JsonPropertyName("denoising_strength"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public float? DenoisingStrength { get; init; }
 
     [JsonPropertyName("override_settings")]

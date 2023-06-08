@@ -1,4 +1,5 @@
 ﻿using Autofocus;
+using Autofocus.Config;
 using Autofocus.Terminal.Extensions;
 
 var api = new StableDiffusion();
@@ -46,7 +47,16 @@ var txt2img = await api.TextToImage(
 );
 
 for (var i = 0; i < txt2img.Images.Count; i++)
+{
     txt2img.Images[i].ToImage().SaveAsPng($"txt2img_image{i}.png");
+
+    var interrogate = await api.Interrogate(new InterrogateConfig
+    {
+        Image = txt2img.Images[i],
+        Model = InterrogateModel.DeepDanbooru
+    });
+    Console.WriteLine(interrogate.Caption);
+}
 
 Console.WriteLine("# PngInfo");
 var info = await api.PngInfo(txt2img.Images[0]);
