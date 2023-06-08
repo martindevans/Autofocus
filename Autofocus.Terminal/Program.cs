@@ -1,8 +1,10 @@
 ﻿using Autofocus;
 using Autofocus.Config;
+using Autofocus.CtrlNet;
 using Autofocus.Terminal.Extensions;
 
 var api = new StableDiffusion();
+var cnet = await api.TryGetControlNet() ?? throw new NotImplementedException("no controlnet!");
 
 var model = await api.StableDiffusionModel("cardosAnime_v20");
 var sampler = await api.Sampler("DPM++ SDE");
@@ -57,6 +59,17 @@ for (var i = 0; i < txt2img.Images.Count; i++)
     });
     Console.WriteLine(interrogate.Caption);
 }
+
+var cnetResults = await cnet.Preprocess(
+    new ControlNetPreprocessConfig()
+    {
+        Images = txt2img.Images.ToList(),
+        Module = await cnet.Module("canny"),
+    }
+);
+
+for (var i = 0; i < cnetResults.Images.Count; i++)
+    cnetResults.Images[i].ToImage().SaveAsPng($"cnet_image{i}.png");
 
 Console.WriteLine("# PngInfo");
 var info = await api.PngInfo(txt2img.Images[0]);

@@ -1,14 +1,25 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Autofocus.Config;
+using Autofocus.CtrlNet;
 using Autofocus.Models;
 
 namespace Autofocus;
 
 public class StableDiffusion
 {
-    private readonly HttpClient _httpClient;
-    private readonly JsonSerializerOptions _serializerOptions;
+    internal static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        IncludeFields = true,
+        Converters =
+        {
+            new Base64EncodedImageConverter()
+        }
+    };
+
+    internal HttpClient HttpClient { get; }
 
     public StableDiffusion(string? address = null)
         : this(address == null ? new Uri("http://127.0.0.1:7860") : new Uri(address))
@@ -17,30 +28,20 @@ public class StableDiffusion
 
     public StableDiffusion(Uri address)
     {
-        _httpClient = new HttpClient();
-        _httpClient.BaseAddress = address;
-        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Autofocus Agent");
-
-        _serializerOptions = new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true,
-            IncludeFields = true,
-            Converters =
-            {
-                new Base64EncodedImageConverter()
-            }
-        };
+        HttpClient = new HttpClient();
+        HttpClient.BaseAddress = address;
+        HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Autofocus Agent");
     }
 
     public async Task<IProgress> Progress()
     {
-        return (await _httpClient.GetFromJsonAsync<ProgressResponse>("/sdapi/v1/progress?skip_current_image=false", _serializerOptions))!;
+        return (await HttpClient.GetFromJsonAsync<ProgressResponse>("/sdapi/v1/progress?skip_current_image=false", SerializerOptions))!;
     }
 
     #region sampler
     public async Task<IEnumerable<ISampler>> Samplers()
     {
-        return (await _httpClient.GetFromJsonAsync<SamplerResponse[]>("/sdapi/v1/samplers", _serializerOptions))!;
+        return (await HttpClient.GetFromJsonAsync<SamplerResponse[]>("/sdapi/v1/samplers", SerializerOptions))!;
     }
 
     public async Task<ISampler> Sampler(string name)
@@ -53,7 +54,7 @@ public class StableDiffusion
     #region upscaler
     public async Task<IEnumerable<IUpscaler>> Upscalers()
     {
-        return (await _httpClient.GetFromJsonAsync<UpscalerResponse[]>("/sdapi/v1/upscalers", _serializerOptions))!;
+        return (await HttpClient.GetFromJsonAsync<UpscalerResponse[]>("/sdapi/v1/upscalers", SerializerOptions))!;
     }
 
     public async Task<IUpscaler> Upscaler(string name)
@@ -66,7 +67,7 @@ public class StableDiffusion
     #region style
     public async Task<IEnumerable<IPromptStyle>> Styles()
     {
-        return (await _httpClient.GetFromJsonAsync<PromptStyleResponse[]>("/sdapi/v1/prompt-styles", _serializerOptions))!;
+        return (await HttpClient.GetFromJsonAsync<PromptStyleResponse[]>("/sdapi/v1/prompt-styles", SerializerOptions))!;
     }
 
     public async Task<IPromptStyle> Style(string name)
@@ -79,7 +80,7 @@ public class StableDiffusion
     #region SD models
     public async Task<IEnumerable<IStableDiffusionModel>> StableDiffusionModels()
     {
-        return (await _httpClient.GetFromJsonAsync<StableDiffusionModelResponse[]>("/sdapi/v1/sd-models", _serializerOptions))!;
+        return (await HttpClient.GetFromJsonAsync<StableDiffusionModelResponse[]>("/sdapi/v1/sd-models", SerializerOptions))!;
     }
 
     public async Task<IStableDiffusionModel> StableDiffusionModel(string name)
@@ -92,14 +93,14 @@ public class StableDiffusion
     #region embeddings
     public async Task<IEmbeddings> Embeddings()
     {
-        return (await _httpClient.GetFromJsonAsync<EmbeddingsResponse>("/sdapi/v1/embeddings", _serializerOptions))!;
+        return (await HttpClient.GetFromJsonAsync<EmbeddingsResponse>("/sdapi/v1/embeddings", SerializerOptions))!;
     }
     #endregion
 
     #region memory
     public async Task<IMemory> Memory()
     {
-        return (await _httpClient.GetFromJsonAsync<MemoryResponse>("/sdapi/v1/memory", _serializerOptions))!;
+        return (await HttpClient.GetFromJsonAsync<MemoryResponse>("/sdapi/v1/memory", SerializerOptions))!;
     }
     #endregion
 
@@ -108,7 +109,7 @@ public class StableDiffusion
     {
         var request = new PngInfoRequest(image);
 
-        var response = await _httpClient.PostAsJsonAsync("/sdapi/v1/png-info", request, _serializerOptions);
+        var response = await HttpClient.PostAsJsonAsync("/sdapi/v1/png-info", request, SerializerOptions);
 
         var result = await response
             .EnsureSuccessStatusCode()
@@ -124,12 +125,12 @@ public class StableDiffusion
     {
         var request = new TextToImageConfigRequest(config);
 
-        var response = await _httpClient.PostAsJsonAsync("/sdapi/v1/txt2img", request, _serializerOptions);
+        var response = await HttpClient.PostAsJsonAsync("/sdapi/v1/txt2img", request, SerializerOptions);
 
         var result = await response
                           .EnsureSuccessStatusCode()
                           .Content
-                          .ReadFromJsonAsync<TextToImageResultResponse>(_serializerOptions);
+                          .ReadFromJsonAsync<TextToImageResultResponse>(SerializerOptions);
 
         return result!;
     }
@@ -140,30 +141,60 @@ public class StableDiffusion
     {
         var request = new ImageToImageConfigRequest(config);
 
-        var response = await _httpClient.PostAsJsonAsync("/sdapi/v1/img2img", request, _serializerOptions);
+        var response = await HttpClient.PostAsJsonAsync("/sdapi/v1/img2img", request, SerializerOptions);
 
         var result = await response
                           .EnsureSuccessStatusCode()
                           .Content
-                          .ReadFromJsonAsync<ImageToImageResultResponse>(_serializerOptions);
+                          .ReadFromJsonAsync<ImageToImageResultResponse>(SerializerOptions);
 
         return result!;
     }
     #endregion
 
     #region interrogate
+    public Task<IInterrogateResult> Interrogate(Base64EncodedImage image, InterrogateModel model = InterrogateModel.CLIP)
+    {
+        return Interrogate(new InterrogateConfig
+        {
+            Image = image,
+            Model = model
+        });
+    }
+
     public async Task<IInterrogateResult> Interrogate(InterrogateConfig config)
     {
         var request = new InterrogateConfigRequest(config);
 
-        var response = await _httpClient.PostAsJsonAsync("/sdapi/v1/interrogate", request, _serializerOptions);
+        var response = await HttpClient.PostAsJsonAsync("/sdapi/v1/interrogate", request, SerializerOptions);
 
         var result = await response
                           .EnsureSuccessStatusCode()
                           .Content
-                          .ReadFromJsonAsync<InterrogateResultResponse>(_serializerOptions);
+                          .ReadFromJsonAsync<InterrogateResultResponse>(SerializerOptions);
 
         return result!;
+    }
+    #endregion
+
+    #region controlnet
+    public async Task<ControlNet?> TryGetControlNet()
+    {
+        // Get version of controlnet
+        var versionResponse = await HttpClient.GetAsync("/controlnet/version");
+
+        // Check if exists at all!
+        if (versionResponse.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        // Check that it is v2
+        var version = await JsonSerializer.DeserializeAsync<ControlNetVersionResponse>(
+            await versionResponse.EnsureSuccessStatusCode().Content.ReadAsStreamAsync()
+        );
+        if (version is not { Version: 2 })
+            throw new InvalidOperationException($"Unknown controlnet version: '{version?.Version}'");
+
+        return new ControlNet(this);
     }
     #endregion
 }
