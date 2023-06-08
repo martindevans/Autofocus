@@ -35,7 +35,25 @@ public class ControlNet
     {
         var response = await _api.HttpClient.GetFromJsonAsync<ControlNetModuleListResponse>("controlnet/module_list", SerializerOptions);
 
-        return response!.ModuleList.Select(a => new ControlNetModule(a));
+        return response!.Details.Select(a =>
+            new ControlNetModule(
+                a.Key,
+                Parameter(a.Value.Sliders.FirstOrDefault(), true),
+                a.Value.Sliders.Skip(1).Select(x => Parameter(x)!).ToArray()
+            )
+        );
+
+        static ControlNetModule.Parameter? Parameter(ControlnetModuleDetailSliderResponse? slider, bool allownull = false)
+        {
+            if (slider == null)
+            {
+                if (allownull)
+                    return null;
+                throw new ArgumentNullException(nameof(slider));
+            }
+
+            return new ControlNetModule.Parameter(slider.Name, slider.Value, slider.Min, slider.Max);
+        }
     }
 
     public async Task<ControlNetModule> Module(string name)

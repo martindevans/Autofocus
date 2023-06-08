@@ -19,7 +19,7 @@ public class StableDiffusion
         }
     };
 
-    internal HttpClient HttpClient { get; }
+    internal HttpClient HttpClient { get; } = new();
 
     public StableDiffusion(string? address = null)
         : this(address == null ? new Uri("http://127.0.0.1:7860") : new Uri(address))
@@ -28,7 +28,6 @@ public class StableDiffusion
 
     public StableDiffusion(Uri address)
     {
-        HttpClient = new HttpClient();
         HttpClient.BaseAddress = address;
         HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Autofocus Agent");
     }

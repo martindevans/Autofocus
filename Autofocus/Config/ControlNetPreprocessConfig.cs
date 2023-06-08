@@ -35,12 +35,37 @@ internal class ControlNetPreprocessConfigRequest
 
     public ControlNetPreprocessConfigRequest(ControlNetPreprocessConfig config)
     {
+        Check(config.Module.Resolution, config.Resolution);
+
+        if (config.Module.Parameters.Count > 0)
+        {
+            var a = config.Module.Parameters[0];
+            Check(a, config.ParameterA);
+        }
+
+        if (config.Module.Parameters.Count > 1)
+        {
+            var b = config.Module.Parameters[1];
+            Check(b, config.ParameterB);
+        }
+
         ControlNetModule = config.Module.Name;
         InputImages = config.Images.Select(img => img.Base64()).ToArray();
         Resolution = config.Resolution;
         ParameterA = config.ParameterA;
         ParameterB = config.ParameterB;
+    }
 
-        //todo:validate parameters of module are in range (module_list returns info about sliders, but it's not read yet)
+    private static void Check(ControlNetModule.Parameter? limit, float? value)
+    {
+        if (limit == null)
+            return;
+        if (value == null)
+            return;
+
+        if (value.Value < limit.Min)
+            throw new ArgumentException($"Parameter {limit.Value} < {limit.Min} ({limit.Name}) is too small", nameof(value));
+        if (value.Value > limit.Max)
+            throw new ArgumentException($"Parameter {limit.Value} > {limit.Min} ({limit.Name}) is too large", nameof(value));
     }
 }

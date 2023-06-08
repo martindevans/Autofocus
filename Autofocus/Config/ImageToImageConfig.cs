@@ -121,7 +121,7 @@ internal class ImageToImageConfigRequest
     public ImageToImageConfigRequest(ImageToImageConfig config)
     {
         Images = config.Images.Select(a => a.Base64()).ToArray();
-        Prompt = config.Prompt.Negative;
+        Prompt = config.Prompt.Positive;
         NegativePrompt = config.Prompt.Negative;
         Styles = config.Prompt.Styles.Select(a => a.Name).ToArray();
         Seed = config.Seed.Seed;

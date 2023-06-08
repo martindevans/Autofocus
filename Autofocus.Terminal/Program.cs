@@ -1,6 +1,5 @@
 ﻿using Autofocus;
 using Autofocus.Config;
-using Autofocus.CtrlNet;
 using Autofocus.Terminal.Extensions;
 
 var api = new StableDiffusion();
@@ -9,7 +8,6 @@ var cnet = await api.TryGetControlNet() ?? throw new NotImplementedException("no
 var model = await api.StableDiffusionModel("cardosAnime_v20");
 var sampler = await api.Sampler("DPM++ SDE");
 
-Console.WriteLine("Generating");
 var txt2img = await api.TextToImage(
     new()
     {
@@ -36,15 +34,6 @@ var txt2img = await api.TextToImage(
         RestoreFaces = true,
         Height = 512,
         Width = 512,
-
-        //HighRes = new()
-        //{
-        //    DenoisingStrength = 0.5,
-        //    Upscaler = await api.Upscaler("Lanczos"),
-
-        //    Width = 512,
-        //    Height = 512,
-        //}
     }
 );
 
@@ -59,17 +48,6 @@ for (var i = 0; i < txt2img.Images.Count; i++)
     });
     Console.WriteLine(interrogate.Caption);
 }
-
-var cnetResults = await cnet.Preprocess(
-    new ControlNetPreprocessConfig()
-    {
-        Images = txt2img.Images.ToList(),
-        Module = await cnet.Module("canny"),
-    }
-);
-
-for (var i = 0; i < cnetResults.Images.Count; i++)
-    cnetResults.Images[i].ToImage().SaveAsPng($"cnet_image{i}.png");
 
 Console.WriteLine("# PngInfo");
 var info = await api.PngInfo(txt2img.Images[0]);
@@ -89,7 +67,7 @@ var img2img = await api.Image2Image(
 
         Prompt = new()
         {
-            Positive = "1boy, (adult), backpack, outdoors, mountains, sunny, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, (standing_on_one:1.25)",
+            Positive = "1boy, (adult), backpack, outdoors, mountains, sunny, glasses, looking_at_viewer, short_hair, short_sleeves, smile, solo, standing, (standing_on_one:1.25)",
             Negative = "easynegative, badhandv4, nsfw, child",
             Styles =
             {
@@ -99,16 +77,30 @@ var img2img = await api.Image2Image(
 
         Seed = new()
         {
-            Seed = 17,
+            Seed = 16,
         },
 
         Sampler = new()
         {
             Sampler = sampler,
-            SamplingSteps = 10,
+            SamplingSteps = 20,
         },
     }
 );
 
 for (var i = 0; i < img2img.Images.Count; i++)
     img2img.Images[i].ToImage().SaveAsPng($"img2img_image{i}.png");
+
+Console.WriteLine();
+Console.WriteLine("Starting ControlNet");
+
+var cnetResults = await cnet.Preprocess(
+    new ControlNetPreprocessConfig()
+    {
+        Images = txt2img.Images.ToList(),
+        Module = await cnet.Module("canny"),
+    }
+);
+
+for (var i = 0; i < cnetResults.Images.Count; i++)
+    cnetResults.Images[i].ToImage().SaveAsPng($"cnet_image{i}.png");
