@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using Autofocus.CtrlNet;
-using Autofocus.Models;
 
 namespace Autofocus.Config;
 
@@ -16,7 +15,7 @@ public class ControlNetPreprocessConfig
     public float? ParameterB { get; set; }
 }
 
-internal class ControlNetPreprocessConfigRequest
+internal class ControlNetPreprocessConfigModel
 {
     [JsonPropertyName("controlnet_module")]
     public string ControlNetModule { get; set; }
@@ -33,7 +32,7 @@ internal class ControlNetPreprocessConfigRequest
     [JsonPropertyName("controlnet_threshold_b"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public float? ParameterB { get; set; }
 
-    public ControlNetPreprocessConfigRequest(ControlNetPreprocessConfig config)
+    public ControlNetPreprocessConfigModel(ControlNetPreprocessConfig config)
     {
         Check(config.Module.Resolution, config.Resolution);
 

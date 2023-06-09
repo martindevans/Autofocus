@@ -65,7 +65,7 @@ public class ControlNet
 
     public async Task<IControlNetPreprocess> Preprocess(ControlNetPreprocessConfig config)
     {
-        var request = await _api.HttpClient.PostAsJsonAsync("controlnet/detect", new ControlNetPreprocessConfigRequest(config), SerializerOptions);
+        var request = await _api.HttpClient.PostAsJsonAsync("controlnet/detect", new ControlNetPreprocessConfigModel(config), SerializerOptions);
 
         var response = await request
             .EnsureSuccessStatusCode()

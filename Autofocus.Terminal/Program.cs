@@ -11,11 +11,11 @@ var sampler = await api.Sampler("DPM++ SDE");
 var txt2img = await api.TextToImage(
     new()
     {
-        Seed = 16,
+        Seed = 22,
 
         Prompt = new()
         {
-            Positive = "1girl, backpack, outdoors, mountains, sunny, frilled_skirt, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, (standing_on_one:1.25), thighhighs",
+            Positive = "1girl, backpack, outdoors, mountains, sunny, frilled_skirt, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, thighhighs",
             Negative = "easynegative, badhandv4, nsfw",
             Styles = {
                 await api.Style("BWphoto"),
@@ -25,15 +25,21 @@ var txt2img = await api.TextToImage(
         Sampler = new()
         {
             Sampler = sampler,
-            SamplingSteps = 10,
+            SamplingSteps = 20,
         },
 
         Model = model,
         BatchSize = 1,
         Batches = 1,
-        RestoreFaces = true,
+        RestoreFaces = false,
         Height = 512,
         Width = 512,
+
+        ControlNet = new()
+        {
+            Image = Image.Load("standing_06.png").ToEncodedImage(),
+            Model = await cnet.Model("control_v11p_sd15_openpose [cab727d4]")
+        },
     }
 );
 
@@ -77,7 +83,7 @@ var img2img = await api.Image2Image(
 
         Seed = new()
         {
-            Seed = 16,
+            Seed = 22,
         },
 
         Sampler = new()

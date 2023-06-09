@@ -21,6 +21,8 @@ public record TextToImageConfig
 
     public HighResConfig? HighRes { get; set; }
 
+    public ControlNetConfig? ControlNet { get; set; }
+
     //"firstphase_width": 0,
     //"firstphase_height": 0,
     //"hr_second_pass_steps": 0,
@@ -127,6 +129,11 @@ internal class TextToImageConfigRequest
     [JsonPropertyName("override_settings_restore_afterwards")]
     public bool RestoreAfterOverrides { get; init; }
 
+
+    [JsonPropertyName("alwayson_scripts")]
+    public Dictionary<string, object> AlwaysOnScripts { get; set; } = new();
+
+
     public TextToImageConfigRequest(TextToImageConfig config)
     {
         Prompt = config.Prompt.Positive;
@@ -158,5 +165,15 @@ internal class TextToImageConfigRequest
 
         RestoreAfterOverrides = true;
         OverrideSettings.Add("sd_model_checkpoint", config.Model.Title);
+
+        if (config.ControlNet != null)
+        {
+            AlwaysOnScripts.Add("controlnet", new
+            {
+                args = new[] {
+                    new ControlNetConfigModel(config.ControlNet)
+                }
+            });
+        }
     }
 }

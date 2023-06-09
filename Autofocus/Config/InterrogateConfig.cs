@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using Autofocus.Models;
 
 namespace Autofocus.Config;
 

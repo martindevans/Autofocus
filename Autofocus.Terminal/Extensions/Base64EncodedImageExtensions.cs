@@ -1,5 +1,4 @@
-﻿using Autofocus.Models;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 
 namespace Autofocus.Terminal.Extensions;
 

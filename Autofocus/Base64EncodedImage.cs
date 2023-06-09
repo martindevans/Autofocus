@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Autofocus.Models;
+namespace Autofocus;
 
 public class Base64EncodedImage
 {
