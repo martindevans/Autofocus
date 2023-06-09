@@ -129,7 +129,6 @@ internal class TextToImageConfigRequest
     [JsonPropertyName("override_settings_restore_afterwards")]
     public bool RestoreAfterOverrides { get; init; }
 
-
     [JsonPropertyName("alwayson_scripts")]
     public Dictionary<string, object> AlwaysOnScripts { get; set; } = new();
 

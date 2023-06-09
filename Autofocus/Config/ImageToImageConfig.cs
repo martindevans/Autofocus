@@ -22,6 +22,8 @@ public record ImageToImageConfig
 
     public bool RestoreFaces { get; set; }
 
+    public ControlNetConfig? ControlNet { get; set; }
+
     /*
      * {
   "resize_mode": 0,
@@ -112,11 +114,16 @@ internal class ImageToImageConfigRequest
     [JsonPropertyName("denoising_strength"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public float? DenoisingStrength { get; init; }
 
+
     [JsonPropertyName("override_settings")]
     public Dictionary<string, string> OverrideSettings = new();
 
     [JsonPropertyName("override_settings_restore_afterwards")]
     public bool RestoreAfterOverrides { get; init; }
+
+    [JsonPropertyName("alwayson_scripts")]
+    public Dictionary<string, object> AlwaysOnScripts { get; set; } = new();
+
 
     public ImageToImageConfigRequest(ImageToImageConfig config)
     {
@@ -143,5 +150,15 @@ internal class ImageToImageConfigRequest
 
         RestoreAfterOverrides = true;
         OverrideSettings.Add("sd_model_checkpoint", config.Model.Title);
+
+        if (config.ControlNet != null)
+        {
+            AlwaysOnScripts.Add("controlnet", new
+            {
+                args = new[] {
+                    new ControlNetConfigModel(config.ControlNet)
+                }
+            });
+        }
     }
 }
