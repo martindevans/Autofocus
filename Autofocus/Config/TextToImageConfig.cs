@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
-using Autofocus.Config.Scripts;
 using Autofocus.Models;
+using Autofocus.Scripts;
 
 namespace Autofocus.Config;
 

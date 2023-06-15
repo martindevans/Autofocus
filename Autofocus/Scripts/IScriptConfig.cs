@@ -1,4 +1,4 @@
-﻿namespace Autofocus.Config.Scripts;
+﻿namespace Autofocus.Scripts;
 
 public interface IScriptConfig
 {

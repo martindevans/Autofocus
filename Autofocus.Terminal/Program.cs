@@ -1,6 +1,6 @@
 ﻿using Autofocus;
 using Autofocus.Config;
-using Autofocus.Config.Scripts;
+using Autofocus.Scripts.UltimateUpscaler;
 using Autofocus.Terminal.Extensions;
 
 var api = new StableDiffusion();

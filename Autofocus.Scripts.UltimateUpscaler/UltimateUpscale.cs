@@ -1,6 +1,6 @@
 ﻿using Autofocus.Models;
 
-namespace Autofocus.Config.Scripts;
+namespace Autofocus.Scripts.UltimateUpscaler;
 
 public class UltimateUpscale
     : IScriptConfig

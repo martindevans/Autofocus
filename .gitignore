@@ -3,7 +3,8 @@
 /Autofocus/obj
 /Autofocus.Terminal/bin
 /Autofocus.Terminal/obj
-
+/Autofocus.Scripts.UltimateUpscaler/bin
+/Autofocus.Scripts.UltimateUpscaler/obj
 /Autofocus.Tests/bin
 /Autofocus.Tests/obj
 /frames_depth
