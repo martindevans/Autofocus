@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Autofocus.Config.Scripts;
 using Autofocus.Models;
 
 namespace Autofocus.Config;
@@ -22,18 +23,21 @@ public record ImageToImageConfig
 
     public bool RestoreFaces { get; set; }
 
-    public ControlNetConfig? ControlNet { get; set; }
+    public Base64EncodedImage? Mask { get; set; }
+    public int MaskBlur { get; set; }
+
+    public bool InpaintingMaskInvert { get; set; }
+
+    public List<IAdditionalScriptConfig> AdditionalScripts { get; set; } = new();
+    public IScriptConfig? Script { get; set; }
 
     /*
      * {
   "resize_mode": 0,
   "image_cfg_scale": 0,
-  "mask": "string",
-  "mask_blur": 4,
   "inpainting_fill": 0,
   "inpaint_full_res": true,
   "inpaint_full_res_padding": 0,
-  "inpainting_mask_invert": 0,
   "initial_noise_multiplier": 0,
   "do_not_save_samples": false,
   "do_not_save_grid": false,
@@ -47,7 +51,6 @@ public record ImageToImageConfig
   "script_name": "string",
   "send_images": true,
   "save_images": false,
-  "alwayson_scripts": {}
 }
      */
 }
@@ -114,6 +117,22 @@ internal class ImageToImageConfigRequest
     [JsonPropertyName("denoising_strength"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public float? DenoisingStrength { get; init; }
 
+    [JsonPropertyName("mask"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Base64EncodedImage? Mask { get; init; }
+
+    [JsonPropertyName("mask_blur"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? MaskBlur { get; init; }
+
+    [JsonPropertyName("inpainting_mask_invert"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? InpaintingMaskInvert { get; init; }
+
+
+    [JsonPropertyName("script_name"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? ScriptName { get; init; }
+
+    [JsonPropertyName("script_args"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public object?[]? ScriptArgs { get; init; }
+
 
     [JsonPropertyName("override_settings")]
     public Dictionary<string, string> OverrideSettings = new();
@@ -147,18 +166,20 @@ internal class ImageToImageConfigRequest
         SamplerName = config.Sampler.Sampler.Name;
         Eta = (float?)config.Sampler.Eta;
         DenoisingStrength = (float?)config.DenoisingStrength;
+        Mask = config.Mask;
+        MaskBlur = config.MaskBlur;
+        InpaintingMaskInvert = config.InpaintingMaskInvert;
+
+        if (config.Script != null)
+        {
+            ScriptName = config.Script.Key;
+            ScriptArgs = config.Script.ToJsonArgs();
+        }
 
         RestoreAfterOverrides = true;
         OverrideSettings.Add("sd_model_checkpoint", config.Model.Title);
 
-        if (config.ControlNet != null)
-        {
-            AlwaysOnScripts.Add("controlnet", new
-            {
-                args = new[] {
-                    new ControlNetConfigModel(config.ControlNet)
-                }
-            });
-        }
+        foreach (var item in config.AdditionalScripts)
+            AlwaysOnScripts.Add(item.Key, item.ToJsonObject());
     }
 }

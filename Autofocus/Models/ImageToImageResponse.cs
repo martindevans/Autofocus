@@ -5,7 +5,7 @@ namespace Autofocus.Models;
 public interface IImageToImageResult
 {
     public IReadOnlyList<Base64EncodedImage> Images { get; }
-    //todo:public IImageToImageResultParameters Parameters { get; }
+    //public IImageToImageResultParameters Parameters { get; }
 }
 
 internal class ImageToImageResultResponse
@@ -15,5 +15,5 @@ internal class ImageToImageResultResponse
     [JsonPropertyName("parameters")] public TextToImageResultParametersResponse Parameters { get; init; } = null!;
 
     IReadOnlyList<Base64EncodedImage> IImageToImageResult.Images => Images;
-    //todo:ITextToImageResultParameters IImageToImageResult.Parameters => Parameters;
+    //ITextToImageResultParameters IImageToImageResult.Parameters => Parameters;
 }

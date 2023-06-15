@@ -37,6 +37,13 @@ public class StableDiffusion
         return (await HttpClient.GetFromJsonAsync<ProgressResponse>("/sdapi/v1/progress?skip_current_image=false", SerializerOptions))!;
     }
 
+    #region scripts
+    public async Task<IScriptsResponse> Scripts()
+    {
+        return (await HttpClient.GetFromJsonAsync<ScriptsResponse>("/sdapi/v1/scripts", SerializerOptions))!;
+    }
+    #endregion
+
     #region sampler
     public async Task<IEnumerable<ISampler>> Samplers()
     {
@@ -53,7 +60,12 @@ public class StableDiffusion
     #region upscaler
     public async Task<IEnumerable<IUpscaler>> Upscalers()
     {
-        return (await HttpClient.GetFromJsonAsync<UpscalerResponse[]>("/sdapi/v1/upscalers", SerializerOptions))!;
+        var upscalers = await HttpClient.GetFromJsonAsync<UpscalerResponse[]>("/sdapi/v1/upscalers", SerializerOptions);
+
+        for (var i = 0; i < upscalers!.Length; i++)
+            upscalers[i].Index = i;
+
+        return upscalers;
     }
 
     public async Task<IUpscaler> Upscaler(string name)

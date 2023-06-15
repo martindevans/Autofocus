@@ -21,7 +21,7 @@ public record TextToImageConfig
 
     public HighResConfig? HighRes { get; set; }
 
-    public ControlNetConfig? ControlNet { get; set; }
+    public List<IAdditionalScriptConfig> AdditionalScripts { get; set; } = new();
 
     //"firstphase_width": 0,
     //"firstphase_height": 0,
@@ -37,7 +37,6 @@ public record TextToImageConfig
     //"save_images": false,
     //"do_not_save_samples": false,
     //"do_not_save_grid": false,
-    //"alwayson_scripts": {}
 }
 
 public record HighResConfig
@@ -165,14 +164,7 @@ internal class TextToImageConfigRequest
         RestoreAfterOverrides = true;
         OverrideSettings.Add("sd_model_checkpoint", config.Model.Title);
 
-        if (config.ControlNet != null)
-        {
-            AlwaysOnScripts.Add("controlnet", new
-            {
-                args = new[] {
-                    new ControlNetConfigModel(config.ControlNet)
-                }
-            });
-        }
+        foreach (var item in config.AdditionalScripts)
+            AlwaysOnScripts.Add(item.Key, item.ToJsonObject());
     }
 }

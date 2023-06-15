@@ -6,3 +6,5 @@
 
 /Autofocus.Tests/bin
 /Autofocus.Tests/obj
+/frames_depth
+/frames_norm

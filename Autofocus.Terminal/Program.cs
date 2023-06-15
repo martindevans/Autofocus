@@ -1,5 +1,7 @@
 ﻿using Autofocus;
 using Autofocus.Config;
+using Autofocus.Config.Scripts;
+using Autofocus.CtrlNet;
 using Autofocus.Terminal.Extensions;
 
 var api = new StableDiffusion();
@@ -7,6 +9,7 @@ var cnet = await api.TryGetControlNet() ?? throw new NotImplementedException("no
 
 var model = await api.StableDiffusionModel("cardosAnime_v20");
 var sampler = await api.Sampler("DPM++ SDE");
+var upscaler = await api.Upscaler("R-ESRGAN 4x+ Anime6B");
 
 var txt2img = await api.TextToImage(
     new()
@@ -35,11 +38,14 @@ var txt2img = await api.TextToImage(
         Height = 512,
         Width = 512,
 
-        ControlNet = new()
+        AdditionalScripts =
         {
-            Image = Image.Load("standing_06.png").ToEncodedImage(),
-            Model = await cnet.Model("control_v11p_sd15_openpose [cab727d4]")
-        },
+            //new ControlNetConfig()
+            //{
+            //    Image = Image.Load("standing_06.png").ToEncodedImage(),
+            //    Model = await cnet.Model("control_v11p_sd15_openpose [cab727d4]")
+            //},
+        }
     }
 );
 
@@ -98,15 +104,47 @@ for (var i = 0; i < img2img.Images.Count; i++)
     img2img.Images[i].ToImage().SaveAsPng($"img2img_image{i}.png");
 
 Console.WriteLine();
-Console.WriteLine("Starting ControlNet");
+Console.WriteLine("Starting Image2Image Ultimate Upscaler");
 
-var cnetResults = await cnet.Preprocess(
-    new ControlNetPreprocessConfig()
+var upscale = await api.Image2Image(
+    new()
     {
-        Images = txt2img.Images.ToList(),
-        Module = await cnet.Module("canny"),
+        Images = {
+            img2img.Images[0]
+        },
+
+        Model = model,
+
+        Prompt = new()
+        {
+            Positive = "1boy, (adult), backpack, outdoors, mountains, sunny, glasses, looking_at_viewer, short_hair, short_sleeves, smile, solo, standing, (standing_on_one:1.25)",
+            Negative = "easynegative, badhandv4, nsfw, child",
+            Styles =
+            {
+                await api.Style("TellTale")
+            }
+        },
+
+        Seed = new()
+        {
+            Seed = 22,
+        },
+
+        Sampler = new()
+        {
+            Sampler = sampler,
+            SamplingSteps = 20,
+        },
+
+        Width = 1024,
+        Height = 1024,
+        DenoisingStrength = 0.22,
+        Script = new UltimateUpscale
+        {
+            Upscaler = upscaler
+        }
     }
 );
 
-for (var i = 0; i < cnetResults.Images.Count; i++)
-    cnetResults.Images[i].ToImage().SaveAsPng($"cnet_image{i}.png");
+for (var i = 0; i < img2img.Images.Count; i++)
+    upscale.Images[i].ToImage().SaveAsPng($"upscale_image{i}.png");

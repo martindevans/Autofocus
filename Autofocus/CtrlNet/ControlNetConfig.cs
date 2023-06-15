@@ -1,7 +1,7 @@
-﻿using Autofocus.CtrlNet;
+﻿using Autofocus.Config;
 using System.Text.Json.Serialization;
 
-namespace Autofocus.Config;
+namespace Autofocus.CtrlNet;
 
 public enum ResizeMode
 {
@@ -18,15 +18,16 @@ public enum ControlMode
 }
 
 public record ControlNetConfig
+    : IAdditionalScriptConfig
 {
     public required Base64EncodedImage Image { get; set; }
     public Base64EncodedImage? Mask { get; set; }
 
     public required ControlNetModel Model { get; set; }
 
-    public float? Weight { get; set; }
-    public float? GuidanceStart { get; set; }
-    public float? GuidanceEnd { get; set; }
+    public double? Weight { get; set; }
+    public double? GuidanceStart { get; set; }
+    public double? GuidanceEnd { get; set; }
 
     public ResizeMode? ResizeMode { get; set; }
     public ControlMode? ControlMode { get; set; }
@@ -39,6 +40,16 @@ public record ControlNetConfig
     //public float? PrecessorParameterA { get; set; }
     //public float? PrecessorParameterB { get; set; }
     //public bool? PixelPerfectPreprocessor { get; set; }
+
+    string IAdditionalScriptConfig.Key => "controlnet";
+
+    object IAdditionalScriptConfig.ToJsonObject()
+    {
+        return new
+        {
+            args = new[] { new ControlNetConfigModel(this) }
+        };
+    }
 }
 
 internal class ControlNetConfigModel
@@ -53,7 +64,7 @@ internal class ControlNetConfigModel
     public string ModelName { get; init; }
 
     [JsonPropertyName("weight"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public float? Weight { get; set; }
+    public double? Weight { get; set; }
 
     [JsonPropertyName("resize_mode"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? ResizeMode { get; set; }
@@ -62,10 +73,10 @@ internal class ControlNetConfigModel
     public bool? LowVRam { get; set; }
 
     [JsonPropertyName("guidance_start"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public float? GuidanceStart { get; set; }
+    public double? GuidanceStart { get; set; }
 
     [JsonPropertyName("guidance_end"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public float? GuidanceEnd { get; set; }
+    public double? GuidanceEnd { get; set; }
 
     [JsonPropertyName("control_mode"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? ControlMode { get; set; }

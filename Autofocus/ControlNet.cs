@@ -1,6 +1,5 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
-using Autofocus.Config;
 using Autofocus.CtrlNet;
 
 namespace Autofocus;

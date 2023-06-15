@@ -9,6 +9,7 @@ public interface IUpscaler
     public string ModelPath { get; }
     public string ModelUrl { get; }
     public double Scale { get; }
+    public int Index { get; }
 }
 
 internal class UpscalerResponse
@@ -19,4 +20,6 @@ internal class UpscalerResponse
     [JsonPropertyName("model_path")] public string ModelPath { get; init; } = null!;
     [JsonPropertyName("model_url")] public string ModelUrl { get; init; } = null!;
     [JsonPropertyName("scale")] public double Scale { get; init; }
+
+    public int Index { get; set; }
 }

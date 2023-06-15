@@ -1,7 +1,6 @@
 ﻿using System.Text.Json.Serialization;
-using Autofocus.CtrlNet;
 
-namespace Autofocus.Config;
+namespace Autofocus.CtrlNet;
 
 public class ControlNetPreprocessConfig
 {
