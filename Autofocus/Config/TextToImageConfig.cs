@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Autofocus.Config.Scripts;
 using Autofocus.Models;
 
 namespace Autofocus.Config;
@@ -22,6 +23,7 @@ public record TextToImageConfig
     public HighResConfig? HighRes { get; set; }
 
     public List<IAdditionalScriptConfig> AdditionalScripts { get; set; } = new();
+    public IScriptConfig? Script { get; set; }
 
     //"firstphase_width": 0,
     //"firstphase_height": 0,
@@ -122,6 +124,13 @@ internal class TextToImageConfigRequest
     public uint? UpscaleHeight { get; init; }
 
 
+    [JsonPropertyName("script_name"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? ScriptName { get; init; }
+
+    [JsonPropertyName("script_args"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public object?[]? ScriptArgs { get; init; }
+
+
     [JsonPropertyName("override_settings")]
     public Dictionary<string, string> OverrideSettings = new();
 
@@ -159,6 +168,12 @@ internal class TextToImageConfigRequest
             Upscaler = config.HighRes.Upscaler.Name;
             UpscaleWidth = config.HighRes.Width;
             UpscaleHeight = config.HighRes.Height;
+        }
+
+        if (config.Script != null)
+        {
+            ScriptName = config.Script.Key;
+            ScriptArgs = config.Script.ToJsonArgs();
         }
 
         RestoreAfterOverrides = true;

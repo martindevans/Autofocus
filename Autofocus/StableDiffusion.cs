@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Autofocus.Config;
+using Autofocus.Config.Scripts;
 using Autofocus.CtrlNet;
 using Autofocus.Models;
 
@@ -132,8 +133,20 @@ public class StableDiffusion
     #endregion
 
     #region Text2Image
+    private async Task CheckTxt2ImgScript(string? name)
+    {
+        if (name == null)
+            return;
+
+        var scripts = await Scripts();
+        if (!scripts.Txt2Img.Contains(name))
+            throw new ScriptNotFoundException(name);
+    }
+
     public async Task<ITextToImageResult> TextToImage(TextToImageConfig config)
     {
+        await CheckTxt2ImgScript(config.Script?.Key);
+
         var request = new TextToImageConfigRequest(config);
 
         var response = await HttpClient.PostAsJsonAsync("/sdapi/v1/txt2img", request, SerializerOptions);
@@ -148,8 +161,20 @@ public class StableDiffusion
     #endregion
 
     #region Image2Image
+    private async Task CheckImg2ImgScript(string? name)
+    {
+        if (name == null)
+            return;
+
+        var scripts = await Scripts();
+        if (!scripts.Img2Img.Contains(name))
+            throw new ScriptNotFoundException(name);
+    }
+
     public async Task<IImageToImageResult> Image2Image(ImageToImageConfig config)
     {
+        await CheckImg2ImgScript(config.Script?.Key);
+
         var request = new ImageToImageConfigRequest(config);
 
         var response = await HttpClient.PostAsJsonAsync("/sdapi/v1/img2img", request, SerializerOptions);
