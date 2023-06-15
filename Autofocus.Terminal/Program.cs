@@ -1,10 +1,11 @@
 ﻿using Autofocus;
 using Autofocus.Config;
 using Autofocus.Config.Scripts;
-using Autofocus.CtrlNet;
 using Autofocus.Terminal.Extensions;
 
 var api = new StableDiffusion();
+await api.Progress();
+
 var cnet = await api.TryGetControlNet() ?? throw new NotImplementedException("no controlnet!");
 
 var model = await api.StableDiffusionModel("cardosAnime_v20");

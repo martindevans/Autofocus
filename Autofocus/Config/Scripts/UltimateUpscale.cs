@@ -5,7 +5,7 @@ namespace Autofocus.Config.Scripts;
 public class UltimateUpscale
     : IScriptConfig
 {
-    public required IUpscaler Upscaler { get; set; }
+    public IUpscaler? Upscaler { get; set; }
 
     public int TileWidth { get; set; } = 512;
     public int TileHeight { get; set; } = 512;
@@ -13,7 +13,7 @@ public class UltimateUpscale
     public int Padding { get; set; } = 32;
     public int MaskBlur { get; set; } = 8;
 
-    public RedrawMode RedrawMode { get; set; } = RedrawMode.Linear;
+    public RedrawMode RedrawMode { get; set; } = RedrawMode.Chess;
 
     public SeamsFixType SeamsFixType { get; set; } = SeamsFixType.None;
     public int SeamsFixMaskBlur { get; set; } = 8;
@@ -37,11 +37,11 @@ public class UltimateUpscale
             SeamsFixWidth,
             SeamsFixDenoise,
             SeamsFixPadding,
-            Upscaler.Index,
+            Upscaler?.Index,
 
             false, // save_upscaled_image a.k.a Upscaled
 
-            RedrawMode,
+            (int)RedrawMode,
 
             false, // save_seams_fix_image a.k.a Seams fix
 

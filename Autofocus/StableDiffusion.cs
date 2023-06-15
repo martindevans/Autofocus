@@ -33,9 +33,9 @@ public class StableDiffusion
         HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Autofocus Agent");
     }
 
-    public async Task<IProgress> Progress()
+    public async Task<IProgress> Progress(bool skipCurrentImage = false)
     {
-        return (await HttpClient.GetFromJsonAsync<ProgressResponse>("/sdapi/v1/progress?skip_current_image=false", SerializerOptions))!;
+        return (await HttpClient.GetFromJsonAsync<ProgressResponse>($"/sdapi/v1/progress?skip_current_image={skipCurrentImage}", SerializerOptions))!;
     }
 
     #region scripts
