@@ -1,5 +1,7 @@
 ﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using Autofocus.Config;
 using Autofocus.CtrlNet;
@@ -31,6 +33,12 @@ public class StableDiffusion
     {
         HttpClient.BaseAddress = address;
         HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Autofocus Agent");
+
+        if (!string.IsNullOrEmpty(address.UserInfo))
+        {
+            var base64 = Convert.ToBase64String(Encoding.ASCII.GetBytes(address.UserInfo));
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
+        }
     }
 
     public async Task<IProgress> Progress(bool skipCurrentImage = false)
