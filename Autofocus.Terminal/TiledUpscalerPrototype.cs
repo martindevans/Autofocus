@@ -50,7 +50,7 @@ public class TiledUpscalerPrototype
             );
 
             var img = txt2img.Images[0];
-            await img.ToImageSharp().SaveAsPngAsync("Input.png");
+            await (await img.ToImageSharpAsync()).SaveAsPngAsync("Input.png");
         }
 
         var input = await Image.LoadAsync("Input.png");

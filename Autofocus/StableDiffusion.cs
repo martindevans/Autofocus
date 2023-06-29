@@ -24,6 +24,12 @@ public class StableDiffusion
 
     internal HttpClient HttpClient { get; } = new();
 
+    public TimeSpan Timeout
+    {
+        get => HttpClient.Timeout;
+        set => HttpClient.Timeout = value;
+    }
+
     public StableDiffusion(string? address = null)
         : this(address == null ? new Uri("http://127.0.0.1:7860") : new Uri(address))
     {
