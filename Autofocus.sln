@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.Terminal", "Autof
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.Tests", "Autofocus.Tests\Autofocus.Tests.csproj", "{B2F96F31-AD22-411E-B3E3-FFC9ECBB01C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.Scripts.UltimateUpscaler", "Autofocus.Scripts.UltimateUpscaler\Autofocus.Scripts.UltimateUpscaler.csproj", "{23AE79CD-A482-42F5-9D75-4D8EC1F8ABAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.Scripts.UltimateUpscaler", "Autofocus.Scripts.UltimateUpscaler\Autofocus.Scripts.UltimateUpscaler.csproj", "{23AE79CD-A482-42F5-9D75-4D8EC1F8ABAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.ImageSharp", "Autofocus.ImageSharp\Autofocus.ImageSharp.csproj", "{6F20B00B-5794-40BA-9BB6-88E6C929C8E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{23AE79CD-A482-42F5-9D75-4D8EC1F8ABAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23AE79CD-A482-42F5-9D75-4D8EC1F8ABAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23AE79CD-A482-42F5-9D75-4D8EC1F8ABAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F20B00B-5794-40BA-9BB6-88E6C929C8E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F20B00B-5794-40BA-9BB6-88E6C929C8E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F20B00B-5794-40BA-9BB6-88E6C929C8E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F20B00B-5794-40BA-9BB6-88E6C929C8E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

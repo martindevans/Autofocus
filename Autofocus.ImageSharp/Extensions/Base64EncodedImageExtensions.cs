@@ -1,10 +1,8 @@
-﻿using SixLabors.ImageSharp;
-
-namespace Autofocus.Terminal.Extensions;
+﻿namespace Autofocus.ImageSharp.Extensions;
 
 public static class Base64EncodedImageExtensions
 {
-    public static Image ToImage(this Base64EncodedImage image)
+    public static Image ToImageSharp(this Base64EncodedImage image)
     {
         var stream = new MemoryStream();
         stream.Write(image.Data.Span);
@@ -12,7 +10,7 @@ public static class Base64EncodedImageExtensions
         return Image.Load(stream);
     }
 
-    public static Base64EncodedImage ToEncodedImage(this Image image)
+    public static Base64EncodedImage ToAutofocusImage(this Image image)
     {
         var stream = new MemoryStream();
         image.SaveAsPng(stream);
