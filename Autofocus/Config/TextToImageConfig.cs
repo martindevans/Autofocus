@@ -22,7 +22,7 @@ public record TextToImageConfig
 
     public HighResConfig? HighRes { get; set; }
 
-    public List<IAdditionalScriptConfig> AdditionalScripts { get; set; } = new();
+    public List<IAdditionalScriptConfig?> AdditionalScripts { get; set; } = new();
     public IScriptConfig? Script { get; set; }
 
     //"firstphase_width": 0,
@@ -180,6 +180,7 @@ internal class TextToImageConfigRequest
         OverrideSettings.Add("sd_model_checkpoint", config.Model.Title);
 
         foreach (var item in config.AdditionalScripts)
-            AlwaysOnScripts.Add(item.Key, item.ToJsonObject());
+            if (item != null)
+                AlwaysOnScripts.Add(item.Key, item.ToJsonObject());
     }
 }
