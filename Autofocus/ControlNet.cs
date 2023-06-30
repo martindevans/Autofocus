@@ -24,8 +24,21 @@ public class ControlNet
 
     public async Task<ControlNetModel> Model(string name)
     {
+        bool IsMatch(ControlNetModel a)
+        {
+            if (a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                return true;
+
+            var idx = a.Name.IndexOf(" [", StringComparison.InvariantCultureIgnoreCase);
+            if (idx < 0)
+                return false;
+
+            var cleaned = a.Name[..idx];
+            return cleaned.Equals(name, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         var models = await Models();
-        return models.Single(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        return models.Single(IsMatch);
     }
     #endregion
 

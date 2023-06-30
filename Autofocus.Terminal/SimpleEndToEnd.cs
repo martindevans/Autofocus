@@ -19,6 +19,7 @@ public class SimpleEndToEnd
         await api.Progress();
 
         var cnet = await api.TryGetControlNet() ?? throw new NotImplementedException("no controlnet!");
+        var cnetModel = await cnet.Model("control_v11e_sd15_ip2p");
 
         var model = await api.StableDiffusionModel("cardosAnime_v20");
         var sampler = await api.Sampler("DPM++ SDE");
@@ -160,6 +161,6 @@ public class SimpleEndToEnd
         );
 
         for (var i = 0; i < img2img.Images.Count; i++)
-            await upscale.Images[i].ToImageSharp().SaveAsPngAsync($"upscale_image{i}.png");
+            await (await upscale.Images[i].ToImageSharpAsync()).SaveAsPngAsync($"upscale_image{i}.png");
     }
 }
