@@ -16,7 +16,7 @@ public class SimpleEndToEnd
     public async Task Run()
     {
         var api = new StableDiffusion();
-        await api.Progress();
+        await api.Ping();
 
         var cnet = await api.TryGetControlNet() ?? throw new NotImplementedException("no controlnet!");
         var cnetModel = await cnet.Model("control_v11e_sd15_ip2p");

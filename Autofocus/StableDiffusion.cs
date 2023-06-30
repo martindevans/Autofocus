@@ -27,7 +27,7 @@ public class StableDiffusion
     public TimeSpan Timeout
     {
         get => HttpClient.Timeout;
-        set => HttpClient.Timeout = value;
+        init => HttpClient.Timeout = value;
     }
 
     public StableDiffusion(string? address = null)
@@ -50,6 +50,11 @@ public class StableDiffusion
     public async Task<IProgress> Progress(bool skipCurrentImage = false)
     {
         return (await HttpClient.GetFromJsonAsync<ProgressResponse>($"/sdapi/v1/progress?skip_current_image={skipCurrentImage}", SerializerOptions))!;
+    }
+
+    public async Task Ping()
+    {
+        (await HttpClient.GetAsync($"/internal/ping")).EnsureSuccessStatusCode();
     }
 
     #region scripts
