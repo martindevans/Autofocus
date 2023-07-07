@@ -4,7 +4,7 @@ namespace Autofocus.Config;
 
 public record PromptConfig
 {
-    public required string Positive { get; init; }
-    public required string Negative { get; init; }
-    public List<IPromptStyle> Styles { get; init; } = new();
+    public required string Positive { get; set; }
+    public required string Negative { get; set; }
+    public List<IPromptStyle> Styles { get; init;  } = new();
 }

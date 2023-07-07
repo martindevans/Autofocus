@@ -1,6 +1,6 @@
 ﻿using Autofocus.ImageSharp.Extensions;
 
-namespace Autofocus.Terminal;
+namespace Autofocus.Terminal.TiledUpscaler;
 
 public class TiledUpscalerPrototype
 {
@@ -28,10 +28,6 @@ public class TiledUpscalerPrototype
                     {
                         Positive = "1girl, backpack, outdoors, mountains, sunny, frilled_skirt, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, thighhighs",
                         Negative = "easynegative, badhandv4, nsfw",
-                        Styles =
-                        {
-                            await api.Style("BWphoto"),
-                        }
                     },
 
                     Sampler = new()
@@ -54,7 +50,7 @@ public class TiledUpscalerPrototype
         }
 
         var input = await Image.LoadAsync("Input.png");
-        var upscaler = new TiledUpscaler.TiledUpscaler(api, model, sampler);
+        var upscaler = new TiledUpscaler(api, model, sampler);
         var result = await upscaler.Upscale(input, 2000, 2000);
         await result.SaveAsPngAsync("output.png");
     }

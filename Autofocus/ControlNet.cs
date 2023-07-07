@@ -18,7 +18,7 @@ public class ControlNet
     #region models
     public async Task<IEnumerable<ControlNetModel>> Models()
     {
-        var response = await _api.HttpClient.GetFromJsonAsync<ControlNetModelListResponse>("controlnet/model_list", SerializerOptions);
+        var response = await _api.FastHttpClient.GetFromJsonAsync<ControlNetModelListResponse>("controlnet/model_list", SerializerOptions);
         return response!.ModelList.Select(a => new ControlNetModel(a));
     }
 
@@ -45,7 +45,7 @@ public class ControlNet
     #region modules
     public async Task<IEnumerable<ControlNetModule>> Modules()
     {
-        var response = await _api.HttpClient.GetFromJsonAsync<ControlNetModuleListResponse>("controlnet/module_list", SerializerOptions);
+        var response = await _api.FastHttpClient.GetFromJsonAsync<ControlNetModuleListResponse>("controlnet/module_list", SerializerOptions);
 
         return response!.Details.Select(a =>
             new ControlNetModule(
@@ -77,7 +77,7 @@ public class ControlNet
 
     public async Task<IControlNetPreprocess> Preprocess(ControlNetPreprocessConfig config)
     {
-        var request = await _api.HttpClient.PostAsJsonAsync("controlnet/detect", new ControlNetPreprocessConfigModel(config), SerializerOptions);
+        var request = await _api.FastHttpClient.PostAsJsonAsync("controlnet/detect", new ControlNetPreprocessConfigModel(config), SerializerOptions);
 
         var response = await request
             .EnsureSuccessStatusCode()
