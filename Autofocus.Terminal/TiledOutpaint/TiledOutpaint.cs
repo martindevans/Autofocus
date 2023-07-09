@@ -100,6 +100,8 @@ namespace Autofocus.Terminal.TiledOutpaint
                     SamplingSteps = _steps1,
                     CfgScale = 4
                 },
+
+                ClipSkip = 2,
             });
 
             var results = new List<Base64EncodedImage>();
@@ -146,6 +148,8 @@ namespace Autofocus.Terminal.TiledOutpaint
                     SamplingSteps = _steps2,
                     CfgScale = 8
                 },
+
+                ClipSkip = 2,
             });
 
             return result2.Images;

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Globalization;
+using System.Text.Json.Serialization;
 using Autofocus.Models;
 using Autofocus.Scripts;
 
@@ -19,6 +20,8 @@ public record TextToImageConfig
     public int? Batches { get; set; }
 
     public bool RestoreFaces { get; set; }
+
+    public uint? ClipSkip { get; init; }
 
     public HighResConfig? HighRes { get; set; }
 
@@ -132,7 +135,7 @@ internal class TextToImageConfigRequest
 
 
     [JsonPropertyName("override_settings")]
-    public Dictionary<string, string> OverrideSettings = new();
+    public Dictionary<string, object> OverrideSettings = new();
 
     [JsonPropertyName("override_settings_restore_afterwards")]
     public bool RestoreAfterOverrides { get; init; }
@@ -178,6 +181,9 @@ internal class TextToImageConfigRequest
 
         RestoreAfterOverrides = true;
         OverrideSettings.Add("sd_model_checkpoint", config.Model.Title);
+
+        if (config.ClipSkip.HasValue)
+            OverrideSettings.Add("CLIP_stop_at_last_layers", config.ClipSkip.Value);
 
         foreach (var item in config.AdditionalScripts)
             if (item != null)

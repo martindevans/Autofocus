@@ -23,6 +23,8 @@ public record ImageToImageConfig
 
     public bool RestoreFaces { get; set; }
 
+    public uint? ClipSkip { get; init; }
+
     public Base64EncodedImage? Mask { get; set; }
     public int MaskBlur { get; set; }
 
@@ -135,7 +137,7 @@ internal class ImageToImageConfigRequest
 
 
     [JsonPropertyName("override_settings")]
-    public Dictionary<string, string> OverrideSettings = new();
+    public Dictionary<string, object> OverrideSettings = new();
 
     [JsonPropertyName("override_settings_restore_afterwards")]
     public bool RestoreAfterOverrides { get; init; }
@@ -178,6 +180,9 @@ internal class ImageToImageConfigRequest
 
         RestoreAfterOverrides = true;
         OverrideSettings.Add("sd_model_checkpoint", config.Model.Title);
+
+        if (config.ClipSkip.HasValue)
+            OverrideSettings.Add("CLIP_stop_at_last_layers", config.ClipSkip.Value);
 
         foreach (var item in config.AdditionalScripts)
             if (item!= null)

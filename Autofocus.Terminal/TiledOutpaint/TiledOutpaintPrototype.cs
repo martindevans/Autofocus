@@ -44,12 +44,14 @@ public class TiledOutpaintPrototype
                 RestoreFaces = false,
                 Height = 512,
                 Width = 512,
+
+                ClipSkip = 0,
             }
         );
 
         var img = txt2img.Images[0];
         await (await img.ToImageSharpAsync()).SaveAsPngAsync("Input.png");
-        
+
         var input = await Image.LoadAsync<Rgba32>("Input.png");
         var outpainter = new TiledOutpaint(api, model, sampler, 2, 2, 75);
 
