@@ -24,7 +24,6 @@ public class TiledOutpaintPrototype
             Negative = "easynegative, badhandv4, nsfw",
         };
 
-        
         var txt2img = await api.TextToImage(
             new()
             {
@@ -45,12 +44,19 @@ public class TiledOutpaintPrototype
                 Height = 512,
                 Width = 512,
 
-                ClipSkip = 0,
+                ClipSkip = 2,
             }
         );
 
         var img = txt2img.Images[0];
         await (await img.ToImageSharpAsync()).SaveAsPngAsync("Input.png");
+
+        var iresult = await api.Interrogate(new InterrogateConfig
+        {
+            Image = img,
+            Model = InterrogateModel.DeepDanbooru
+        });
+        Console.WriteLine(iresult.Caption);
 
         var input = await Image.LoadAsync<Rgba32>("Input.png");
         var outpainter = new TiledOutpaint(api, model, sampler, 2, 2, 75);

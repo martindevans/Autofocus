@@ -133,7 +133,7 @@ internal class ImageToImageConfigRequest
     public string? ScriptName { get; init; }
 
     [JsonPropertyName("script_args"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public object?[]? ScriptArgs { get; init; }
+    public object? ScriptArgs { get; init; }
 
 
     [JsonPropertyName("override_settings")]

@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Autofocus.Models;
 using Autofocus.Scripts;
 
@@ -131,7 +130,7 @@ internal class TextToImageConfigRequest
     public string? ScriptName { get; init; }
 
     [JsonPropertyName("script_args"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public object?[]? ScriptArgs { get; init; }
+    public object? ScriptArgs { get; init; }
 
 
     [JsonPropertyName("override_settings")]

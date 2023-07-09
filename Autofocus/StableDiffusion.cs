@@ -232,7 +232,7 @@ public class StableDiffusion
         return Interrogate(new InterrogateConfig
         {
             Image = image,
-            Model = model
+            Model = model,
         });
     }
 

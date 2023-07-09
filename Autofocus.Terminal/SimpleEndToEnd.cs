@@ -115,7 +115,7 @@ public class SimpleEndToEnd
         );
 
         for (var i = 0; i < img2img.Images.Count; i++)
-            await img2img.Images[i].ToImageSharp().SaveAsPngAsync($"img2img_image{i}.png");
+            await (await img2img.Images[i].ToImageSharpAsync()).SaveAsPngAsync($"img2img_image{i}.png");
 
         Console.WriteLine();
         Console.WriteLine("Starting Image2Image Ultimate Upscaler");

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Autofocus.Extensions.AfterDetailer\Autofocus.Extensions.AfterDetailer.csproj" />
     <ProjectReference Include="..\Autofocus.ImageSharp\Autofocus.ImageSharp.csproj" />
     <ProjectReference Include="..\Autofocus.Scripts.UltimateUpscaler\Autofocus.Scripts.UltimateUpscaler.csproj" />
     <ProjectReference Include="..\Autofocus\Autofocus.csproj" />

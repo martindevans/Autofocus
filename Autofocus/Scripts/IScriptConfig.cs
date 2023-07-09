@@ -4,5 +4,5 @@ public interface IScriptConfig
 {
     string Key { get; }
 
-    object?[] ToJsonArgs();
+    object? ToJsonArgs();
 }
