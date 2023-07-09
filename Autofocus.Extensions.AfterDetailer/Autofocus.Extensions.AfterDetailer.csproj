@@ -4,6 +4,9 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Autofocus.Extensions.AfterDetailer</Title>
+    <Description>Adds "After Detailer" support to Autofocus (Automatic1111 API wrapper).</Description>
   </PropertyGroup>
 
   <ItemGroup>
