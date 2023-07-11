@@ -2,7 +2,7 @@
 
 namespace Autofocus.Scripts.UltimateUpscaler;
 
-public class UltimateUpscale
+public record UltimateUpscale
     : IScriptConfig
 {
     public IUpscaler? Upscaler { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Autofocus.Extensions.AfterDetailer
 {
-    public class Step
+    public record Step
     {
         public required string Model { get; set; }
 
@@ -10,6 +10,8 @@ namespace Autofocus.Extensions.AfterDetailer
         public string? NegativePrompt { get; set; }
 
         public bool RestoreFaces { get; set; }
+
+        public double? Confidence { get; set; }
 
         public ControlNetModel? ControlNetModel { get; set; }
         public double? ControlNetWeight { get; set; }
@@ -24,7 +26,6 @@ namespace Autofocus.Extensions.AfterDetailer
 
                 { "ad_restore_face", RestoreFaces }
 
-                //"ad_confidence": 0.3,
                 //"ad_mask_min_ratio": 0.0,
                 //"ad_mask_max_ratio": 1.0,
                 //"ad_dilate_erode": 32,
@@ -48,6 +49,9 @@ namespace Autofocus.Extensions.AfterDetailer
                 args["ad_prompt"] = PositivePrompt;
             if (NegativePrompt != null)
                 args["ad_negative_prompt"] = NegativePrompt;
+
+            if (Confidence.HasValue)
+                args["ad_confidence"] = Confidence.Value;
 
             if (ControlNetModel != null)
             {

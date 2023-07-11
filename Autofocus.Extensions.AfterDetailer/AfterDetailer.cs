@@ -2,7 +2,7 @@
 
 namespace Autofocus.Extensions.AfterDetailer;
 
-public class AfterDetailer
+public record AfterDetailer
     : IAdditionalScriptConfig
 {
     public List<Step> Steps { get; set; } = new();
