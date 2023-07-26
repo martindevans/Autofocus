@@ -27,6 +27,7 @@ public record ImageToImageConfig
 
     public Base64EncodedImage? Mask { get; set; }
     public int MaskBlur { get; set; }
+    public MaskFillMode? InpaintingFill { get; set; }
 
     public bool InpaintingMaskInvert { get; set; }
 
@@ -37,7 +38,6 @@ public record ImageToImageConfig
      * {
   "resize_mode": 0,
   "image_cfg_scale": 0,
-  "inpainting_fill": 0,
   "inpaint_full_res": true,
   "inpaint_full_res_padding": 0,
   "initial_noise_multiplier": 0,
@@ -48,13 +48,34 @@ public record ImageToImageConfig
   "s_tmax": 0,
   "s_tmin": 0,
   "s_noise": 1,
-  "script_args": [],
   "include_init_images": false,
-  "script_name": "string",
   "send_images": true,
   "save_images": false,
 }
      */
+}
+
+public enum MaskFillMode
+{
+    /// <summary>
+    /// Fill with colours of the images
+    /// </summary>
+    Fill = 0,
+
+    /// <summary>
+    /// Fill with original content
+    /// </summary>
+    original = 1,
+    
+    /// <summary>
+    /// Fill with latent noise
+    /// </summary>
+    LatentNoise = 2,
+    
+    /// <summary>
+    /// Fill with latent space zeros
+    /// </summary>
+    LatentNothing = 3,
 }
 
 internal class ImageToImageConfigRequest
@@ -128,6 +149,9 @@ internal class ImageToImageConfigRequest
     [JsonPropertyName("inpainting_mask_invert"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool? InpaintingMaskInvert { get; init; }
 
+    [JsonPropertyName("inpainting_fill"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? InpaintingFill { get; init; }
+
 
     [JsonPropertyName("script_name"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? ScriptName { get; init; }
@@ -170,6 +194,7 @@ internal class ImageToImageConfigRequest
         DenoisingStrength = (float?)config.DenoisingStrength;
         Mask = config.Mask;
         MaskBlur = config.MaskBlur;
+        InpaintingFill = (int?)config.InpaintingFill;
         InpaintingMaskInvert = config.InpaintingMaskInvert;
 
         if (config.Script != null)

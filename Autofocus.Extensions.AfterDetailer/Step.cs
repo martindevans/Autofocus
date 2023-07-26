@@ -12,11 +12,18 @@ namespace Autofocus.Extensions.AfterDetailer
         public bool RestoreFaces { get; set; }
 
         public double? Confidence { get; set; }
+        public double? MaskMinRatio { get; set; }
+        public double? MaskMaxRatio { get; set; }
 
         public ControlNetModel? ControlNetModel { get; set; }
         public double? ControlNetWeight { get; set; }
         public double? ControlnetGuidanceStart { get; set; }
         public double? ControlnetGuidanceEnd { get; set; }
+
+        public int? SamplerSteps { get; set; }
+        public double? CfgScale { get; set; }
+
+        public (int, int)? InpaintSize { get; set; }
 
         internal Dictionary<string, object?> ToJsonObject()
         {
@@ -26,8 +33,6 @@ namespace Autofocus.Extensions.AfterDetailer
 
                 { "ad_restore_face", RestoreFaces }
 
-                //"ad_mask_min_ratio": 0.0,
-                //"ad_mask_max_ratio": 1.0,
                 //"ad_dilate_erode": 32,
                 //"ad_x_offset": 0,
                 //"ad_y_offset": 0,
@@ -36,13 +41,6 @@ namespace Autofocus.Extensions.AfterDetailer
                 //"ad_denoising_strength": 0.4,
                 //"ad_inpaint_only_masked": true,
                 //"ad_inpaint_only_masked_padding": 0,
-                //"ad_use_inpaint_width_height": false,
-                //"ad_inpaint_width": 512,
-                //"ad_inpaint_height": 512,
-                //"ad_use_steps": true,
-                //"ad_steps": 28,
-                //"ad_use_cfg_scale": false,
-                //"ad_cfg_scale": 7.0,
             };
 
             if (PositivePrompt != null)
@@ -52,6 +50,30 @@ namespace Autofocus.Extensions.AfterDetailer
 
             if (Confidence.HasValue)
                 args["ad_confidence"] = Confidence.Value;
+
+            if (SamplerSteps.HasValue)
+            {
+                args["ad_use_steps"] = true;
+                args["ad_steps"] = SamplerSteps.Value;
+            }
+
+            if (CfgScale.HasValue)
+            {
+                args["ad_use_cfg_scale"] = true;
+                args["ad_cfg_scale"] = CfgScale.Value;
+            }
+
+            if (MaskMinRatio.HasValue)
+                args["ad_mask_min_ratio"] = MaskMinRatio.Value;
+            if (MaskMaxRatio.HasValue)
+                args["ad_mask_max_ratio"] = MaskMaxRatio.Value;
+
+            if (InpaintSize.HasValue)
+            {
+                args["ad_use_inpaint_width_height"] = true;
+                args["ad_inpaint_width"] = InpaintSize.Value.Item1;
+                args["ad_inpaint_height"] = InpaintSize.Value.Item2;
+            }
 
             if (ControlNetModel != null)
             {

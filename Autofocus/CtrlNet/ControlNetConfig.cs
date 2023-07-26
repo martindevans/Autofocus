@@ -20,7 +20,7 @@ public enum ControlMode
 public record ControlNetConfig
     : IAdditionalScriptConfig
 {
-    public required Base64EncodedImage Image { get; set; }
+    public required Base64EncodedImage? Image { get; set; }
     public Base64EncodedImage? Mask { get; set; }
 
     public required ControlNetModel Model { get; set; }
@@ -55,7 +55,7 @@ public record ControlNetConfig
 internal class ControlNetConfigModel
 {
     [JsonPropertyName("input_image")]
-    public Base64EncodedImage Image { get; init; }
+    public Base64EncodedImage? Image { get; init; }
 
     [JsonPropertyName("mask"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Base64EncodedImage? Mask { get; init; }

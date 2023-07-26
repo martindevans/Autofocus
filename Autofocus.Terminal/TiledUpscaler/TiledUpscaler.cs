@@ -1,6 +1,8 @@
 ﻿using Autofocus.Config;
+using Autofocus.CtrlNet;
 using Autofocus.ImageSharp.Extensions;
 using Autofocus.Models;
+using SixLabors.ImageSharp.Drawing.Processing;
 
 namespace Autofocus.Terminal.TiledUpscaler
 {
@@ -14,7 +16,7 @@ namespace Autofocus.Terminal.TiledUpscaler
         private readonly int _overlap;
         private readonly int _overlapHalf;
 
-        public TiledUpscaler(StableDiffusion api, IStableDiffusionModel model, ISampler sampler, int steps = 20, int overlap = 32)
+        public TiledUpscaler(StableDiffusion api, IStableDiffusionModel model, ISampler sampler, int steps = 40, int overlap = 64)
         {
             _api = api;
             _model = model;
@@ -25,12 +27,15 @@ namespace Autofocus.Terminal.TiledUpscaler
             _overlap = _overlapHalf * 2;
         }
 
-        public async Task<Image> Upscale(Image source, int width, int height)
+        public async Task<Image> Upscale(Image source, PromptConfig prompt, int width, int height)
         {
+            var cnet = await _api.TryGetControlNet() ?? throw new NotImplementedException("no controlnet!");
+            var cnetModel = await cnet.Model("control_v11f1e_sd15_tile");
+
             if (source.Width == width && source.Height == height)
                 return source;
 
-            // CLone input before mutating it!
+            // Clone input before mutating it!
             using var input = source.CloneAs<Rgb24>();
 
             // Scale up to the target size
@@ -60,39 +65,52 @@ namespace Autofocus.Terminal.TiledUpscaler
                     tile.Mutate(a => a.Crop(rect));
                     await tile.SaveAsPngAsync($"tile_{x}_{y}_i.png");
 
+                    using var tileMask = new Image<Rgb24>(tile.Width, tile.Height);
+                    tileMask.Mutate(ctx =>
+                    {
+                        ctx.Fill(Color.White)
+                           .Fill(Color.Black, postcrop)
+                           .BoxBlur(_overlapHalf / 2)
+                           .Fill(Color.Black, postcrop);
+                    });
+
                     var tileresult = await _api.Image2Image(new()
                     {
-                        Images = { tile.ToAutofocusImage() },
+                        Images = { await tile.ToAutofocusImageAsync() },
                         DenoisingStrength = 0.25,
+                        //Mask = await tileMask.ToAutofocusImageAsync(),
 
                         Model = _model,
                         Sampler = new SamplerConfig
                         {
                             Sampler = _sampler,
-                            CfgScale = 7,
                             SamplingSteps = _steps
                         },
                         Seed = new SeedConfig { Seed = 1234 },
-                        Prompt = new PromptConfig
-                        {
-                            Positive = "sharp, <lora:add_detail:0.5>",
-                            Negative = "blurry",
-                        },
+                        Prompt = prompt,
 
                         Batches = 1,
                         BatchSize = 1,
 
                         Width = (uint)rect.Width,
                         Height = (uint)rect.Height,
+
+                        AdditionalScripts =
+                        {
+                            new ControlNetConfig
+                            {
+                                Model = cnetModel,
+                                Image = null,
+                            },
+                        }
                     });
 
-                    using var tileimg = tileresult.Images[0].ToImageSharp();
+                    using var tileimg = await tileresult.Images[0].ToImageSharpAsync();
                     {
                         tileimg.Mutate(a => a.Crop(postcrop));
 
                         // ReSharper disable once AccessToDisposedClosure
                         output.Mutate(a => a.DrawImage(tileimg, pos, PixelColorBlendingMode.Normal, 1));
-                        await tileimg.SaveAsPngAsync($"tile_{x}_{y}_o.png");
                     }
                 }
             }
