@@ -9,6 +9,8 @@ namespace Autofocus
 
         public Task Ping();
 
+        public Task<IQueueStatus> QueueStatus();
+
         public Task<IScriptsResponse> Scripts();
 
         public Task<IEnumerable<ISampler>> Samplers();

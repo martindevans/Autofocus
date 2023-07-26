@@ -76,6 +76,11 @@ public class StableDiffusion
         (await FastHttpClient.GetAsync($"/internal/ping")).EnsureSuccessStatusCode();
     }
 
+    public async Task<IQueueStatus> QueueStatus()
+    {
+        return (await FastHttpClient.GetFromJsonAsync<QueueStatusResponse>($"/sdapi/v1/queue/status", SerializerOptions))!;
+    }
+
     #region scripts
     public async Task<IScriptsResponse> Scripts()
     {
