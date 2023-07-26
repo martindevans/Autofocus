@@ -7,7 +7,7 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Autofocus.Scripts.UltimateUpscaler</Title>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Martin Evans</Authors>
     <PackageProjectUrl>https://github.com/martindevans/Autofocus</PackageProjectUrl>
     <Description>Adds "Ultimate Upscaler" support to Autofocus (Automatic1111 API wrapper).</Description>
