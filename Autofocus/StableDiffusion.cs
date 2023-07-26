@@ -78,7 +78,7 @@ public class StableDiffusion
 
     public async Task<IQueueStatus> QueueStatus()
     {
-        return (await FastHttpClient.GetFromJsonAsync<QueueStatusResponse>($"/sdapi/v1/queue/status", SerializerOptions))!;
+        return (await FastHttpClient.GetFromJsonAsync<QueueStatusResponse>($"/queue/status", SerializerOptions))!;
     }
 
     #region scripts
