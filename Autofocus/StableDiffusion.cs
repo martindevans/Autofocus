@@ -23,8 +23,8 @@ public class StableDiffusion
         }
     };
 
-    private HttpClient SlowHttpClient { get; } = new();
-    internal HttpClient FastHttpClient { get; } = new();
+    private HttpClient SlowHttpClient { get; }
+    internal HttpClient FastHttpClient { get; }
 
     /// <summary>
     /// Timeout used for "fast" operations (anything that's not image processing)
@@ -50,8 +50,19 @@ public class StableDiffusion
 
     }
 
-    public StableDiffusion(Uri address)
+    public StableDiffusion(Uri address, IHttpClientFactory? factory = null, string? httpClientName = null)
     {
+        if (factory == null)
+        {
+            SlowHttpClient = new();
+            FastHttpClient = new();
+        }
+        else
+        {
+            SlowHttpClient = httpClientName == null ? factory.CreateClient() : factory.CreateClient(httpClientName);
+            FastHttpClient = httpClientName == null ? factory.CreateClient() : factory.CreateClient(httpClientName);
+        }
+
         SlowHttpClient.BaseAddress = address;
         SlowHttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Autofocus Agent");
 
