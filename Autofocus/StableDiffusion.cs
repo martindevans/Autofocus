@@ -73,11 +73,11 @@ public class StableDiffusion
             SlowHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
             FastHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
 
-			var builder = new UriBuilder(address) { UserName = null, Password = null };
-			var cleanAddress = builder.Uri;
-			SlowHttpClient.BaseAddress = cleanAddress;
-			FastHttpClient.BaseAddress = cleanAddress;
-		}
+            var builder = new UriBuilder(address) { UserName = null, Password = null };
+            var cleanAddress = builder.Uri;
+            SlowHttpClient.BaseAddress = cleanAddress;
+            FastHttpClient.BaseAddress = cleanAddress;
+        }
         else
         {
             SlowHttpClient.BaseAddress = address;
