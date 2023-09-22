@@ -63,10 +63,7 @@ public class StableDiffusion
             FastHttpClient = httpClientName == null ? factory.CreateClient() : factory.CreateClient(httpClientName);
         }
 
-        SlowHttpClient.BaseAddress = address;
         SlowHttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Autofocus Agent");
-
-        FastHttpClient.BaseAddress = address;
         FastHttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Autofocus Agent");
 
         if (!string.IsNullOrEmpty(address.UserInfo))
@@ -74,6 +71,16 @@ public class StableDiffusion
             var base64 = Convert.ToBase64String(Encoding.ASCII.GetBytes(address.UserInfo));
             SlowHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
             FastHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
+
+            var builder = new UriBuilder(address) { UserName = null, Password = null };
+            var cleanAddress = builder.Uri;
+            SlowHttpClient.BaseAddress = cleanAddress;
+            FastHttpClient.BaseAddress = cleanAddress;
+        }
+        else
+        {
+            SlowHttpClient.BaseAddress = address;
+            FastHttpClient.BaseAddress = address;
         }
     }
 
