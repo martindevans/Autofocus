@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Autofocus.CtrlNet;
 
@@ -15,14 +16,21 @@ public class ControlNet
         _api = api;
     }
 
-    #region models
-    public async Task<IEnumerable<ControlNetModel>> Models()
+	#region models
+	/// <exception cref="HttpRequestException"/>
+	/// <exception cref="OperationCanceledException"/>
+	public async Task<IEnumerable<ControlNetModel>> Models(CancellationToken cancellationToken = default)
     {
-        var response = await _api.FastHttpClient.GetFromJsonAsync<ControlNetModelListResponse>("controlnet/model_list", SerializerOptions);
+        var response = await _api.FastHttpClient.GetFromJsonAsync<ControlNetModelListResponse>("controlnet/model_list", SerializerOptions, cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
+
         return response!.ModelList.Select(a => new ControlNetModel(a));
     }
 
-    public async Task<ControlNetModel> Model(string name)
+    /// <exception cref="HttpRequestException"/>
+    /// <exception cref="InvalidOperationException"/>
+    /// <exception cref="OperationCanceledException"/>
+    public async Task<ControlNetModel> Model(string name, CancellationToken cancellationToken = default)
     {
         bool IsMatch(ControlNetModel a)
         {
@@ -37,15 +45,20 @@ public class ControlNet
             return cleaned.Equals(name, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        var models = await Models();
+        var models = await Models(cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
+
         return models.Single(IsMatch);
     }
-    #endregion
+	#endregion
 
-    #region modules
-    public async Task<IEnumerable<ControlNetModule>> Modules()
+	#region modules
+	/// <exception cref="HttpRequestException"/>
+	/// <exception cref="OperationCanceledException"/>
+	public async Task<IEnumerable<ControlNetModule>> Modules(CancellationToken cancellationToken = default)
     {
-        var response = await _api.FastHttpClient.GetFromJsonAsync<ControlNetModuleListResponse>("controlnet/module_list", SerializerOptions);
+        var response = await _api.FastHttpClient.GetFromJsonAsync<ControlNetModuleListResponse>("controlnet/module_list", SerializerOptions, cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
 
         return response!.Details.Select(a =>
             new ControlNetModule(
@@ -68,21 +81,29 @@ public class ControlNet
         }
     }
 
-    public async Task<ControlNetModule> Module(string name)
+    /// <exception cref="HttpRequestException"/>
+    /// <exception cref="InvalidOperationException"/>
+    /// <exception cref="OperationCanceledException"/>
+    public async Task<ControlNetModule> Module(string name, CancellationToken cancellationToken = default)
     {
-        var models = await Modules();
+        var models = await Modules(cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
+
         return models.Single(a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
-    #endregion
+	#endregion
 
-    public async Task<IControlNetPreprocess> Preprocess(ControlNetPreprocessConfig config)
+	/// <exception cref="HttpRequestException"/>
+	/// <exception cref="OperationCanceledException"/>
+	public async Task<IControlNetPreprocess> Preprocess(ControlNetPreprocessConfig config, CancellationToken cancellationToken = default)
     {
-        var request = await _api.FastHttpClient.PostAsJsonAsync("controlnet/detect", new ControlNetPreprocessConfigModel(config), SerializerOptions);
+        var request = await _api.FastHttpClient.PostAsJsonAsync("controlnet/detect", new ControlNetPreprocessConfigModel(config), SerializerOptions, cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
 
         var response = await request
             .EnsureSuccessStatusCode()
             .Content
-            .ReadFromJsonAsync<ControlNetPreprocessResponse>(SerializerOptions);
+            .ReadFromJsonAsync<ControlNetPreprocessResponse>(SerializerOptions, cancellationToken);
 
         return response!;
     }

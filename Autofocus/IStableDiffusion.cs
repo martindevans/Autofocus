@@ -1,48 +1,96 @@
 ﻿using Autofocus.Config;
 using Autofocus.Models;
+using Autofocus.Scripts;
 
 namespace Autofocus
 {
     public interface IStableDiffusion
     {
-        public Task<IProgress> Progress(bool skipCurrentImage = false);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IProgress> Progress(bool skipCurrentImage = false, CancellationToken cancellationToken = default);
 
-        public Task Ping();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task Ping(CancellationToken cancellationToken = default);
 
-        public Task<IQueueStatus> QueueStatus();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IQueueStatus> QueueStatus(CancellationToken cancellationToken = default);
 
-        public Task<IScriptsResponse> Scripts();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IScriptsResponse> Scripts(CancellationToken cancellationToken = default);
 
-        public Task<IEnumerable<ISampler>> Samplers();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IEnumerable<ISampler>> Samplers(CancellationToken cancellationToken = default);
 
-        public Task<ISampler> Sampler(string name);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="InvalidOperationException"/>  
+		/// <exception cref="OperationCanceledException"/>
+		public Task<ISampler> Sampler(string name, CancellationToken cancellationToken = default);
 
-        public Task<IEnumerable<IUpscaler>> Upscalers();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IEnumerable<IUpscaler>> Upscalers(CancellationToken cancellationToken = default);
 
-        public Task<IUpscaler> Upscaler(string name);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="InvalidOperationException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IUpscaler> Upscaler(string name, CancellationToken cancellationToken = default);
 
-        public Task<IEnumerable<IPromptStyle>> Styles();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IEnumerable<IPromptStyle>> Styles(CancellationToken cancellationToken = default);
 
-        public Task<IPromptStyle> Style(string name);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="InvalidOperationException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IPromptStyle> Style(string name, CancellationToken cancellationToken = default);
 
-        public Task<IEnumerable<IStableDiffusionModel>> StableDiffusionModels();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IEnumerable<IStableDiffusionModel>> StableDiffusionModels(CancellationToken cancellationToken = default);
 
-        public Task<IStableDiffusionModel> StableDiffusionModel(string name);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="InvalidOperationException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IStableDiffusionModel> StableDiffusionModel(string name, CancellationToken cancellationToken = default);
 
-        public Task<IEmbeddings> Embeddings();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IEmbeddings> Embeddings(CancellationToken cancellationToken = default);
 
-        public Task<IMemory> Memory();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IMemory> Memory(CancellationToken cancellationToken = default);
 
-        public Task<IPngInfo> PngInfo(Base64EncodedImage image);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IPngInfo> PngInfo(Base64EncodedImage image, CancellationToken cancellationToken = default);
 
-        public Task<ITextToImageResult> TextToImage(TextToImageConfig config);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		/// <exception cref="ScriptNotFoundException"/>
+		public Task<ITextToImageResult> TextToImage(TextToImageConfig config, CancellationToken cancellationToken = default);
 
-        public Task<IImageToImageResult> Image2Image(ImageToImageConfig config);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		/// <exception cref="ScriptNotFoundException"/>
+		public Task<IImageToImageResult> Image2Image(ImageToImageConfig config, CancellationToken cancellationToken = default);
 
-        public Task<IInterrogateResult> Interrogate(Base64EncodedImage image, InterrogateModel model = InterrogateModel.CLIP);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IInterrogateResult> Interrogate(Base64EncodedImage image, InterrogateModel model = InterrogateModel.CLIP, CancellationToken cancellationToken = default);
 
-        public Task<IInterrogateResult> Interrogate(InterrogateConfig config);
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<IInterrogateResult> Interrogate(InterrogateConfig config, CancellationToken cancellationToken = default);
 
-        public Task<ControlNet?> TryGetControlNet();
+		/// <exception cref="HttpRequestException"/>
+		/// <exception cref="InvalidOperationException"/>
+		/// <exception cref="OperationCanceledException"/>
+		public Task<ControlNet?> TryGetControlNet(CancellationToken cancellationToken = default);
     }
 }
