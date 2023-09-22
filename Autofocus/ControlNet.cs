@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
 using Autofocus.CtrlNet;
 
@@ -32,6 +31,11 @@ public class ControlNet
     /// <exception cref="OperationCanceledException"/>
     public async Task<ControlNetModel> Model(string name, CancellationToken cancellationToken = default)
     {
+        var models = await Models(cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return models.Single(IsMatch);
+
         bool IsMatch(ControlNetModel a)
         {
             if (a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
@@ -44,11 +48,6 @@ public class ControlNet
             var cleaned = a.Name[..idx];
             return cleaned.Equals(name, StringComparison.InvariantCultureIgnoreCase);
         }
-
-        var models = await Models(cancellationToken);
-        cancellationToken.ThrowIfCancellationRequested();
-
-        return models.Single(IsMatch);
     }
 	#endregion
 

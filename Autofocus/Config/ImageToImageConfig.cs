@@ -210,7 +210,7 @@ internal class ImageToImageConfigRequest
             OverrideSettings.Add("CLIP_stop_at_last_layers", config.ClipSkip.Value);
 
         foreach (var item in config.AdditionalScripts)
-            if (item!= null)
+            if (item != null)
                 AlwaysOnScripts.Add(item.Key, item.ToJsonObject());
     }
 }

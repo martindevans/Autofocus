@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
@@ -88,13 +87,13 @@ public class StableDiffusion
     /// <inheritdoc />
     public async Task Ping(CancellationToken cancellationToken = default)
     {
-        (await FastHttpClient.GetAsync($"/internal/ping", cancellationToken)).EnsureSuccessStatusCode();
+        (await FastHttpClient.GetAsync("/internal/ping", cancellationToken)).EnsureSuccessStatusCode();
     }
 
     /// <inheritdoc />
     public async Task<IQueueStatus> QueueStatus(CancellationToken cancellationToken = default)
     {
-        return (await FastHttpClient.GetFromJsonAsync<QueueStatusResponse>($"/queue/status", SerializerOptions, cancellationToken))!;
+        return (await FastHttpClient.GetFromJsonAsync<QueueStatusResponse>("/queue/status", SerializerOptions, cancellationToken))!;
     }
 
     #region scripts
