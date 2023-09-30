@@ -5,13 +5,6 @@ namespace Autofocus.Terminal.TiledOutpaint;
 
 public class TiledOutpaintPrototype
 {
-    private readonly string[] _args;
-
-    public TiledOutpaintPrototype(string[] args)
-    {
-        _args = args;
-    }
-
     public async Task Run()
     {
         var api = new StableDiffusion();

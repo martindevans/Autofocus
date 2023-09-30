@@ -10,7 +10,7 @@
     <Authors>Martin Evans</Authors>
     <Description>Automatic1111 API Wrapper</Description>
     <PackageProjectUrl>https://github.com/martindevans/Autofocus</PackageProjectUrl>
-    <Version>4.6.1</Version>
+    <Version>4.6.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

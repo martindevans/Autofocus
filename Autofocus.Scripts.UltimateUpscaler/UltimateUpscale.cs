@@ -23,7 +23,7 @@ public record UltimateUpscale
 
     public string Key => "ultimate sd upscale";
 
-    public object? ToJsonArgs()
+    public object ToJsonArgs()
     {
         return new object?[]
         {

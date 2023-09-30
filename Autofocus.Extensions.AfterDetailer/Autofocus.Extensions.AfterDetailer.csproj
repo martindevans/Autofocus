@@ -7,7 +7,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Autofocus.Extensions.AfterDetailer</Title>
     <Description>Adds "After Detailer" support to Autofocus (Automatic1111 API wrapper).</Description>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

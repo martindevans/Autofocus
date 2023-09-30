@@ -16,7 +16,6 @@ public class InterrogateConfig
     public bool? KeepModelsInMemory { get; set; }
 
     //todo:interrogate extras
-    //"interrogate_keep_models_in_memory": false,
     //"interrogate_return_ranks": false,
     //"interrogate_clip_num_beams": 1,
     //"interrogate_clip_min_length": 24,

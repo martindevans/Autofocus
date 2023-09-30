@@ -47,7 +47,6 @@ public class StableDiffusion
     public StableDiffusion(string? address = null)
         : this(address == null ? new Uri("http://127.0.0.1:7860") : new Uri(address))
     {
-
     }
 
     public StableDiffusion(Uri address, IHttpClientFactory? factory = null, string? httpClientName = null)

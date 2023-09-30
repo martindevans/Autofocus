@@ -6,20 +6,13 @@ namespace Autofocus.Terminal;
 
 public class SimpleEndToEnd
 {
-    private readonly string[] _args;
-
-    public SimpleEndToEnd(string[] args)
-    {
-        _args = args;
-    }
-
     public async Task Run()
     {
         var api = new StableDiffusion();
         await api.Ping();
 
         var cnet = await api.TryGetControlNet() ?? throw new NotImplementedException("no controlnet!");
-        var cnetModel = await cnet.Model("control_v11e_sd15_ip2p");
+        _ = await cnet.Model("control_v11e_sd15_ip2p");
 
         var model = await api.StableDiffusionModel("cardosAnime_v20");
         var sampler = await api.Sampler("DPM++ SDE");
@@ -65,7 +58,7 @@ public class SimpleEndToEnd
 
         for (var i = 0; i < txt2img.Images.Count; i++)
         {
-            await txt2img.Images[i].ToImageSharp().SaveAsPngAsync($"txt2img_image{i}.png");
+            await (await txt2img.Images[i].ToImageSharpAsync()).SaveAsPngAsync($"txt2img_image{i}.png");
 
             var interrogate = await api.Interrogate(new InterrogateConfig
             {

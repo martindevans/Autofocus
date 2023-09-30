@@ -5,23 +5,16 @@ namespace Autofocus.Terminal;
 
 public class VideoPrototyping
 {
-    private readonly string[] _args;
-
-    public VideoPrototyping(string[] args)
-    {
-        _args = args;
-    }
-
     public async Task Run()
     {
         var api = new StableDiffusion();
         var cnet = await api.TryGetControlNet() ?? throw new NotImplementedException("no controlnet!");
 
         var model = await api.StableDiffusionModel("cardosAnime_v20");
-        var cnetModelDepth = await cnet.Model("control_v11f1p_sd15_depth [cfd03158]");
+        //var cnetModelDepth = await cnet.Model("control_v11f1p_sd15_depth [cfd03158]");
         var cnetModelNorm = await cnet.Model("control_v11p_sd15_normalbae [316696f1]");
-        var cnetInvert = await cnet.Module("invert");
-        var cnetThreshold = await cnet.Module("threshold");
+        //var cnetInvert = await cnet.Module("invert");
+        //var cnetThreshold = await cnet.Module("threshold");
         var sampler = await api.Sampler("DPM++ SDE");
 
         var frames = Directory.EnumerateFiles("./../../../../frames_norm").ToArray();
@@ -33,7 +26,7 @@ public class VideoPrototyping
         foreach (var frame in frames)
         {
             var normImage = await Image.LoadAsync(frame);
-            var normImg = normImage.ToAutofocusImage();
+            var normImg = await normImage.ToAutofocusImageAsync();
 
             var normMask = normImage.CloneAs<Rgb24>();
             normMask.Mutate(ctx =>
@@ -41,7 +34,7 @@ public class VideoPrototyping
                 ctx.BinaryThreshold(0.01f)
                    .Invert();
             });
-            var maskImg = normMask.ToAutofocusImage();
+            var maskImg = await normMask.ToAutofocusImageAsync();
             await normMask.SaveAsPngAsync($"masks_output/mask_img_{frameNum}.png");
 
             //// Invert depth image
@@ -107,7 +100,7 @@ public class VideoPrototyping
                 );
 
                 prevFrame = txt2img.Images[0];
-                await prevFrame.ToImageSharp().SaveAsPngAsync($"frames_output/{frameNum++}.png");
+                await (await prevFrame.ToImageSharpAsync()).SaveAsPngAsync($"frames_output/{frameNum++}.png");
             }
             else
             {
@@ -138,7 +131,7 @@ public class VideoPrototyping
 
                         AdditionalScripts =
                         {
-                    new ControlNetConfig()
+                    new ControlNetConfig
                     {
                         Image = normImg,
                         Model = cnetModelNorm,
@@ -152,7 +145,7 @@ public class VideoPrototyping
                 );
 
                 prevFrame = img2img.Images[0];
-                await prevFrame.ToImageSharp().SaveAsPngAsync($"frames_output/{frameNum++}.png");
+                await (await prevFrame.ToImageSharpAsync()).SaveAsPngAsync($"frames_output/{frameNum++}.png");
             }
         }
     }

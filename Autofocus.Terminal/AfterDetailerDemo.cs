@@ -2,65 +2,57 @@
 using Autofocus.Extensions.AfterDetailer;
 using Autofocus.ImageSharp.Extensions;
 
-namespace Autofocus.Terminal
+namespace Autofocus.Terminal;
+
+public class AfterDetailerDemo
 {
-    public class AfterDetailerDemo
+    public async Task Run()
     {
-        private readonly string[] _args;
+        var api = new StableDiffusion();
+        await api.Ping();
 
-        public AfterDetailerDemo(string[] args)
+        var config = new TextToImageConfig
         {
-            _args = args;
-        }
+            Seed = 44,
 
-        public async Task Run()
+            Prompt = new()
+            {
+                Positive = "1girl, sylvanas, elf, evil, red eyes, banshee queen, ice power, full body",
+                Negative = "easynegative, badhandv4, bad-hands-5, logo, Watermark, username, signature, jpeg artifacts,, (nsfw:1.4), (spider:1.4)",
+            },
+
+            Sampler = new()
+            {
+                Sampler = await api.Sampler("UniPC"),
+                SamplingSteps = 20,
+            },
+
+            Model = await api.StableDiffusionModel("cardosAnime_v20"),
+            BatchSize = 1,
+            Batches = 1,
+            RestoreFaces = false,
+            Height = 512,
+            Width = 512,
+        };
+
+        var txt2img = await api.TextToImage(config);
+        for (var i = 0; i < txt2img.Images.Count; i++)
+            await (await txt2img.Images[i].ToImageSharpAsync()).SaveAsPngAsync($"txt2img_image{i}.png");
+
+        config.AdditionalScripts.Add(new AfterDetailer
         {
-            var api = new StableDiffusion();
-            await api.Ping();
-
-            var config = new TextToImageConfig()
+            Steps =
             {
-                Seed = 44,
-
-                Prompt = new()
+                new()
                 {
-                    Positive = "1girl, sylvanas, elf, evil, red eyes, banshee queen, ice power, full body",
-                    Negative = "easynegative, badhandv4, bad-hands-5, logo, Watermark, username, signature, jpeg artifacts,, (nsfw:1.4), (spider:1.4)",
-                },
-
-                Sampler = new()
-                {
-                    Sampler = await api.Sampler("UniPC"),
-                    SamplingSteps = 20,
-                },
-
-                Model = await api.StableDiffusionModel("cardosAnime_v20"),
-                BatchSize = 1,
-                Batches = 1,
-                RestoreFaces = false,
-                Height = 512,
-                Width = 512,
-            };
-
-            var txt2img = await api.TextToImage(config);
-            for (var i = 0; i < txt2img.Images.Count; i++)
-                await (await txt2img.Images[i].ToImageSharpAsync()).SaveAsPngAsync($"txt2img_image{i}.png");
-
-            config.AdditionalScripts.Add(new AfterDetailer()
-            {
-                Steps =
-                {
-                    new()
-                    {
-                        Model = "face_yolov8s.pt",
-                        PositivePrompt = "detailed, masterpiece, angry, green eyes, elf ears"
-                    }
+                    Model = "face_yolov8s.pt",
+                    PositivePrompt = "detailed, masterpiece, angry, green eyes, elf ears"
                 }
-            });
+            }
+        });
 
-            var txt2img2 = await api.TextToImage(config);
-            for (var i = 0; i < txt2img2.Images.Count; i++)
-                await (await txt2img2.Images[i].ToImageSharpAsync()).SaveAsPngAsync($"txt2img2_image{i}.png");
-        }
+        var txt2img2 = await api.TextToImage(config);
+        for (var i = 0; i < txt2img2.Images.Count; i++)
+            await (await txt2img2.Images[i].ToImageSharpAsync()).SaveAsPngAsync($"txt2img2_image{i}.png");
     }
 }

@@ -31,7 +31,7 @@ public record ImageToImageConfig
 
     public bool InpaintingMaskInvert { get; set; }
 
-    public List<IAdditionalScriptConfig?> AdditionalScripts { get; set; } = new();
+    public List<IAdditionalScriptConfig> AdditionalScripts { get; set; } = new();
     public IScriptConfig? Script { get; set; }
 
     /*
@@ -210,7 +210,6 @@ internal class ImageToImageConfigRequest
             OverrideSettings.Add("CLIP_stop_at_last_layers", config.ClipSkip.Value);
 
         foreach (var item in config.AdditionalScripts)
-            if (item != null)
-                AlwaysOnScripts.Add(item.Key, item.ToJsonObject());
+            AlwaysOnScripts.Add(item.Key, item.ToJsonObject());
     }
 }

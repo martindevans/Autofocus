@@ -5,13 +5,6 @@ namespace Autofocus.Terminal.TiledUpscaler;
 
 public class TiledUpscalerPrototype
 {
-    private readonly string[] _args;
-
-    public TiledUpscalerPrototype(string[] args)
-    {
-        _args = args;
-    }
-
     public async Task Run()
     {
         var api = new StableDiffusion();
