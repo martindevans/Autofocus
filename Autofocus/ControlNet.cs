@@ -29,12 +29,12 @@ public class ControlNet
     /// <exception cref="HttpRequestException"/>
     /// <exception cref="InvalidOperationException"/>
     /// <exception cref="OperationCanceledException"/>
-    public async Task<ControlNetModel> Model(string name, CancellationToken cancellationToken = default)
+    public async Task<ControlNetModel?> Model(string name, CancellationToken cancellationToken = default)
     {
         var models = await Models(cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
-        return models.Single(IsMatch);
+        return models.SingleOrDefault(IsMatch);
 
         bool IsMatch(ControlNetModel a)
         {

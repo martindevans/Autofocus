@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.Scripts.UltimateU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.ImageSharp", "Autofocus.ImageSharp\Autofocus.ImageSharp.csproj", "{6F20B00B-5794-40BA-9BB6-88E6C929C8E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.Extensions.AfterDetailer", "Autofocus.Extensions.AfterDetailer\Autofocus.Extensions.AfterDetailer.csproj", "{C0782777-AD03-4539-8681-27A8C188C6C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.Extensions.AfterDetailer", "Autofocus.Extensions.AfterDetailer\Autofocus.Extensions.AfterDetailer.csproj", "{C0782777-AD03-4539-8681-27A8C188C6C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.Outpaint", "Autofocus.Outpaint\Autofocus.Outpaint.csproj", "{62D1B959-3DE7-4AED-99C3-DF130F5BCDE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{C0782777-AD03-4539-8681-27A8C188C6C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0782777-AD03-4539-8681-27A8C188C6C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0782777-AD03-4539-8681-27A8C188C6C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62D1B959-3DE7-4AED-99C3-DF130F5BCDE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62D1B959-3DE7-4AED-99C3-DF130F5BCDE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62D1B959-3DE7-4AED-99C3-DF130F5BCDE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62D1B959-3DE7-4AED-99C3-DF130F5BCDE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

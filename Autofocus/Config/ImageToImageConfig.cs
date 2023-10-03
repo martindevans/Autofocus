@@ -31,7 +31,7 @@ public record ImageToImageConfig
 
     public bool InpaintingMaskInvert { get; set; }
 
-    public List<IAdditionalScriptConfig> AdditionalScripts { get; set; } = new();
+    public List<IAdditionalScriptConfig?> AdditionalScripts { get; set; } = new();
     public IScriptConfig? Script { get; set; }
 
     /*
@@ -152,6 +152,9 @@ internal class ImageToImageConfigRequest
     [JsonPropertyName("inpainting_fill"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? InpaintingFill { get; init; }
 
+    [JsonPropertyName("include_init_images")]
+    public bool IncludeInitImages { get; set; }
+
 
     [JsonPropertyName("script_name"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? ScriptName { get; init; }
@@ -196,6 +199,7 @@ internal class ImageToImageConfigRequest
         MaskBlur = config.MaskBlur;
         InpaintingFill = (int?)config.InpaintingFill;
         InpaintingMaskInvert = config.InpaintingMaskInvert;
+        IncludeInitImages = false;
 
         if (config.Script != null)
         {
@@ -210,6 +214,7 @@ internal class ImageToImageConfigRequest
             OverrideSettings.Add("CLIP_stop_at_last_layers", config.ClipSkip.Value);
 
         foreach (var item in config.AdditionalScripts)
-            AlwaysOnScripts.Add(item.Key, item.ToJsonObject());
+            if (item != null)
+                AlwaysOnScripts.Add(item.Key, item.ToJsonObject());
     }
 }
