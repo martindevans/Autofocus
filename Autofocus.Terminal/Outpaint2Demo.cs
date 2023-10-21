@@ -17,7 +17,7 @@ public class Outpaint2Demo
 
         var genPrompt = new PromptConfig
         {
-            Positive = "1girl, white hair, purple eyes, black choker, smiling, mountains, clouds, sky",
+            Positive = "1girl, white hair, purple eyes, black choker, slight smile, mountains, clouds, sky",
             Negative = "easynegative, badhandv4",
         };
 
@@ -42,11 +42,13 @@ public class Outpaint2Demo
             Width = 512,
         };
 
-        // Generate initial image
-        var txt2img = await api.TextToImage(config);
+        if (!File.Exists("txt2img_image.png"))
+        {
+            // Generate initial image
+            var txt2img = await api.TextToImage(config);
             await (await txt2img.Images.Single().ToImageSharpAsync()).SaveAsPngAsync("txt2img_image.png");
-
-        var startFrame = txt2img.Images.Single();
+        }
+        var startFrame = await Image.LoadAsync("txt2img_image.png");
 
         // outpainting prompt
         var outpaintPrompt = genPrompt;

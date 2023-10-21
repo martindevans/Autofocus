@@ -7,7 +7,7 @@ namespace Autofocus.Outpaint.Extensions
 {
     internal static class ImageExtensions
     {
-        public static void Bleed(this Image<Rgba32> image, Rectangle from, int radius, int? seed)
+        public static void Bleed(this Image<Rgba32> image, Rectangle from, int radius, int? seed, float angleFactor = 0.5f)
         {
             var rng = new Random(seed ?? RandomNumberGenerator.GetInt32(int.MaxValue));
 
@@ -19,33 +19,54 @@ namespace Autofocus.Outpaint.Extensions
                         continue;
 
                     // Get the distance to the closest point on the rectangle
-                    var actualClosest = new Point
-                    {
-                        X = Math.Clamp(i, from.Left, from.Right),
-                        Y = Math.Clamp(j, from.Top, from.Bottom)
-                    };
-                    var distance = Vector2.Distance(new Vector2(i, j), new Vector2(actualClosest.X, actualClosest.Y));
+                    var closestPoint = from.ClosestPoint(i, j).ToVector2();
+                    var distance = Vector2.Distance(new Vector2(i, j), closestPoint);
 
-                    // Set another point (still on the rectangle border) randomly offset, more randomness with distance
-                    var offsetClosest = new Point
-                    {
-                        X = Math.Clamp(i + (int)Math.Round((rng.NextSingle() * 2 - 1) * distance), from.Left, from.Right),
-                        Y = Math.Clamp(j + (int)Math.Round((rng.NextSingle() * 2 - 1) * distance), from.Top, from.Bottom)
-                    };
-                    var closestPixel = image[offsetClosest.X, offsetClosest.Y].ToVector4();
+                    // Select another nearby point on the rectangle border (more randomness with distance)
+                    var nearbyPoint = from.ClosestPoint(new Point(
+                        i + (int)(rng.NextSingle(-distance, distance) * angleFactor),
+                        j + (int)(rng.NextSingle(-distance, distance) * angleFactor)
+                    ));
+                    var selectedPixel = image[nearbyPoint.X, nearbyPoint.Y].ToVector4();
 
-                    // Randomize colour slightly (based on distance)
-                    var distanceFactor = distance / radius;
-                    closestPixel += new Vector4(
-                        (rng.NextSingle() - 0.5f) * distanceFactor,
-                        (rng.NextSingle() - 0.5f) * distanceFactor,
-                        (rng.NextSingle() - 0.5f) * distanceFactor,
+                    // Randomize colour slightly (based on distance). Once the distance is > radius this add 100% randomisation.
+                    // Note that even then the colour is still biased by the base colour.
+                    var distanceFactor = Math.Clamp(distance / radius, 0, 1);
+                    selectedPixel += new Vector4(
+                        rng.NextSingle(-1f, 1f) * distanceFactor,
+                        rng.NextSingle(-1f, 1f) * distanceFactor,
+                        rng.NextSingle(-1f, 1f) * distanceFactor,
                         0
                     );
 
-                    image[i, j] = new Rgba32(closestPixel);
+                    image[i, j] = new Rgba32(selectedPixel);
                 }
             }
+        }
+
+        private static Point ClosestPoint(this Rectangle rectangle, Point point)
+        {
+            return ClosestPoint(rectangle, point.X, point.Y);
+        }
+
+        private static Point ClosestPoint(this Rectangle rectangle, int x, int y)
+        {
+            return new Point
+            {
+                X = Math.Clamp(x, rectangle.Left, rectangle.Right),
+                Y = Math.Clamp(y, rectangle.Top, rectangle.Bottom)
+            };
+        }
+
+        private static Vector2 ToVector2(this Point point)
+        {
+            return new Vector2(point.X, point.Y);
+        }
+
+        private static float NextSingle(this Random random, float minInclusive, float maxInclusive)
+        {
+            var range = maxInclusive - minInclusive;
+            return random.NextSingle() * range + minInclusive;
         }
     }
 }

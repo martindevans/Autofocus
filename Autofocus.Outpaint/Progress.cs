@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Autofocus.Outpaint
+﻿namespace Autofocus.Outpaint
 {
     internal class Progress
     {

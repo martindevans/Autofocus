@@ -143,8 +143,8 @@ internal class ImageToImageConfigRequest
     [JsonPropertyName("mask"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Base64EncodedImage? Mask { get; init; }
 
-    [JsonPropertyName("mask_blur"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? MaskBlur { get; init; }
+    [JsonPropertyName("mask_blur")]
+    public int MaskBlur { get; init; }
 
     [JsonPropertyName("inpainting_mask_invert"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool? InpaintingMaskInvert { get; init; }

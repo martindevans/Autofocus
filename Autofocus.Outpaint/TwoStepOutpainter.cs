@@ -15,7 +15,7 @@ namespace Autofocus.Outpaint;
 /// This works in two main steps:<br />
 /// 1. Downscale the image. Paint the original content into the middle. Randomly "bleed" pixels of the content out
 ///    into the border (giving some noisy context). Run image2image with high steps and a mask proecting original content.<br />
-/// 2. Scale back up to the correct size, run i2i with low steps and no mask. This cleans up blurriness and allows it to adjust the original content slightly.
+/// 2. Scale back up to the correct size, run image2image with low steps and no mask. This cleans up blurriness and allows it to adjust the original content slightly.
 /// </summary>
 public class TwoStepOutpainter
 {
@@ -71,7 +71,9 @@ public class TwoStepOutpainter
         });
 
         // "Bleed" random pixels out from the image into the blank space
-        inputImage.Bleed(new Rectangle(128, 128, input.Width - 1, input.Height - 1), 128, null);
+        inputImage.Bleed(new Rectangle(128, 128, input.Width - 1, input.Height - 1), 80, null);
+
+        //return new[] { await inputImage.ToAutofocusImageAsync() };
 
         progress.Report(0.05f);
 
