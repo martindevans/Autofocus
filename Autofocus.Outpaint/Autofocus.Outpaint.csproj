@@ -1,12 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Autofocus.Outpaint</Title>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version>1.1.0</Version>
+    <Authors>Martin Evans</Authors>
+    <PackageProjectUrl>https://github.com/martindevans/Autofocus</PackageProjectUrl>
+    <Description>Outpainting algorithms using Autofocus (Automatic1111 API wrapper).</Description>
   </PropertyGroup>
 
   <ItemGroup>
