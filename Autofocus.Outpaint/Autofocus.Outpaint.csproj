@@ -7,7 +7,7 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Autofocus.Outpaint</Title>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Authors>Martin Evans</Authors>
     <PackageProjectUrl>https://github.com/martindevans/Autofocus</PackageProjectUrl>
     <Description>Outpainting algorithms using Autofocus (Automatic1111 API wrapper).</Description>
