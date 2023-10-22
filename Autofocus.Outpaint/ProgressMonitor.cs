@@ -1,21 +1,23 @@
 ﻿namespace Autofocus.Outpaint
 {
-    internal class Progress
+    internal class ProgressMonitor
     {
-        public event Action<float>? ProgressEvent;
+        public event Func<ProgressReport, Task>? ProgressEvent;
 
         private readonly IStableDiffusion _api;
         private float _progress;
 
-        public Progress(IStableDiffusion api)
+        public ProgressMonitor(IStableDiffusion api)
         {
             _api = api;
         }
 
-        public void Report(float value)
+        public Task Report(float value, Base64EncodedImage? intermediate = null)
         {
             _progress = Math.Max(value, _progress);
-            ProgressEvent?.Invoke(_progress);
+
+            return ProgressEvent?.Invoke(new ProgressReport(_progress, intermediate))
+                ?? Task.CompletedTask;
         }
 
         public async Task<T> Report<T>(float start, float end, Task<T> task)
@@ -23,14 +25,14 @@
             start = Math.Max(start, _progress);
             end = Math.Max(start, end);
 
-            Report(start);
+            await Report(start);
 
             while (!task.IsCompleted)
             {
                 try
                 {
                     var value = await _api.Progress(true);
-                    Report(start + (end - start) * (float)value.Progress);
+                    await Report(start + (end - start) * (float)value.Progress);
                 }
                 catch (TimeoutException)
                 {
@@ -42,7 +44,7 @@
                 }
             }
 
-            Report(end);
+            await Report(end);
 
             return await task;
         }

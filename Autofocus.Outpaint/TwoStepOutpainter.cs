@@ -47,20 +47,38 @@ public class TwoStepOutpainter
         };
     }
 
-    public async Task<IReadOnlyList<Base64EncodedImage>> Outpaint(PromptConfig prompt, Base64EncodedImage input, Action<float> progress)
+    public Task<IReadOnlyList<Base64EncodedImage>> Outpaint(PromptConfig prompt, Base64EncodedImage input, Action<float> progressCallback)
     {
-        using var inputImage = await input.ToImageSharpAsync();
-        return await Outpaint(prompt, inputImage, progress);
+        return Outpaint(prompt, input, report =>
+        {
+            progressCallback(report.Progress);
+            return Task.CompletedTask;
+        });
     }
 
-    public async Task<IReadOnlyList<Base64EncodedImage>> Outpaint(PromptConfig prompt, Image input, Action<float> progressCallback)
+    public async Task<IReadOnlyList<Base64EncodedImage>> Outpaint(PromptConfig prompt, Base64EncodedImage input, Func<ProgressReport, Task> progressCallback)
     {
-        var progress = new Progress(_api);
+        using var inputImage = await input.ToImageSharpAsync();
+        return await Outpaint(prompt, inputImage, progressCallback);
+    }
+
+    public Task<IReadOnlyList<Base64EncodedImage>> Outpaint(PromptConfig prompt, Image input, Action<float> progressCallback)
+    {
+        return Outpaint(prompt, input, report =>
+        {
+            progressCallback(report.Progress);
+            return Task.CompletedTask;
+        });
+    }
+
+    public async Task<IReadOnlyList<Base64EncodedImage>> Outpaint(PromptConfig prompt, Image input, Func<ProgressReport, Task> progressCallback)
+    {
+        var progress = new ProgressMonitor(_api);
         progress.ProgressEvent += progressCallback;
 
         // Calculate average colour of the whole image
         var average = input.AverageColor();
-        progress.Report(0.01f);
+        await progress.Report(0.01f);
 
         // Create an image expanded outwards by 128 in all directions
         using var inputImage = new Image<Rgba32>(input.Width + 256, input.Height + 256);
@@ -75,7 +93,7 @@ public class TwoStepOutpainter
 
         //return new[] { await inputImage.ToAutofocusImageAsync() };
 
-        progress.Report(0.05f);
+        await progress.Report(0.05f);
 
         // Create a mask covering the noise with a smooth transition into the image
         using var inputMask = new Image<Rgba32>(inputImage.Width, inputImage.Height);
@@ -88,7 +106,7 @@ public class TwoStepOutpainter
                .Fill(Color.Black, rect)
                .BoxBlur(blur);
         });
-        progress.Report(0.1f);
+        await progress.Report(0.1f);
 
         // Shrink inputs down to the size of the original input for the first step
         inputImage.Mutate(ctx => ctx.Resize(input.Size));
@@ -135,14 +153,14 @@ public class TwoStepOutpainter
                 }
             })
         );
-        progress.Report(0.5f);
+        await progress.Report(0.5f);
 
         var progPerBatch = 0.5f / result1.Images.Count;
         var baseProgress = 0.5f;
         var results = new List<Base64EncodedImage>();
         foreach (var item in result1.Images)
         {
-            progress.Report(baseProgress);
+            await progress.Report(baseProgress);
             {
                 using var image = await item.ToImageSharpAsync();
                 image.Mutate(ctx =>
@@ -164,7 +182,7 @@ public class TwoStepOutpainter
                 results.AddRange(inner);
             }
             baseProgress += progPerBatch;
-            progress.Report(baseProgress);
+            await progress.Report(baseProgress);
         }
         return results;
     }
