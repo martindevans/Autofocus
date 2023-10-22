@@ -77,14 +77,13 @@ public class TwoStepOutpainter
         progress.ProgressEvent += progressCallback;
 
         // Calculate average colour of the whole image
-        var average = input.AverageColor();
         await progress.Report(0.01f);
 
         // Create an image expanded outwards by 128 in all directions
         using var inputImage = new Image<Rgba32>(input.Width + 256, input.Height + 256);
         inputImage.Mutate(ctx =>
         {
-            ctx.Fill(average);
+            ctx.Fill(Color.Gray);
             ctx.DrawImage(input, new Point(128, 128), _drawingOptions);
         });
 
