@@ -1,7 +1,7 @@
 ﻿using Autofocus.Config;
 using Autofocus.ImageSharp.Extensions;
 using Autofocus.Outpaint;
-using SixLabors.ImageSharp.Formats.Gif;
+using SixLabors.ImageSharp;
 
 namespace Autofocus.Terminal;
 

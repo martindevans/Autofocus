@@ -1,5 +1,8 @@
 ﻿using Autofocus.CtrlNet;
 using Autofocus.ImageSharp.Extensions;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Autofocus.Terminal;
 

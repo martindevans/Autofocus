@@ -1,6 +1,7 @@
 ﻿using Autofocus.Config;
 using Autofocus.Extensions.AfterDetailer;
 using Autofocus.ImageSharp.Extensions;
+using SixLabors.ImageSharp;
 
 namespace Autofocus.Terminal;
 

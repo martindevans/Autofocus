@@ -1,4 +1,6 @@
-﻿namespace Autofocus.ImageSharp.Extensions;
+﻿using SixLabors.ImageSharp;
+
+namespace Autofocus.ImageSharp.Extensions;
 
 public static class Base64EncodedImageExtensions
 {

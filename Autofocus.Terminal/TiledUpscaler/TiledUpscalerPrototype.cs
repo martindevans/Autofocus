@@ -1,5 +1,6 @@
 ﻿using Autofocus.Config;
 using Autofocus.ImageSharp.Extensions;
+using SixLabors.ImageSharp;
 
 namespace Autofocus.Terminal.TiledUpscaler;
 
