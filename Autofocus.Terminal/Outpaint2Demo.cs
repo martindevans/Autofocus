@@ -17,14 +17,15 @@ public class Outpaint2Demo
 
         var genPrompt = new PromptConfig
         {
-            Positive = "1girl, white hair, purple eyes, black choker, slight smile, mountains, clouds, sky",
+            Positive = "that thing I left in that place that one time",
+            //Positive = "1girl, white hair, purple eyes, black choker, slight smile, mountains, clouds, sky",
             Negative = "easynegative, badhandv4",
         };
 
         var model = await api.StableDiffusionModel("cardosAnime_v20");
         var config = new TextToImageConfig
         {
-            Seed = 34657,
+            Seed = new(),
 
             Prompt = genPrompt,
 
@@ -54,7 +55,10 @@ public class Outpaint2Demo
         var outpaintPrompt = genPrompt;
 
         // Outpaint
-        var outpainter = new TwoStepOutpainter(api, model, await api.Sampler("DDIM"));
+        var outpainter = new TwoStepOutpainter(api, model, await api.Sampler("DDIM"))
+        {
+            UseControlNetTile = false,
+        };
         var results = await outpainter.Outpaint(outpaintPrompt, startFrame, Console.WriteLine);
         for (var i = 0; i < results.Count; i++)
             await (await results[i].ToImageSharpAsync()).SaveAsPngAsync($"outpaint_{i}.png");

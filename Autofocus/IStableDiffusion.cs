@@ -92,4 +92,13 @@ public interface IStableDiffusion
     /// <exception cref="InvalidOperationException"/>
     /// <exception cref="OperationCanceledException"/>
     public Task<ControlNet?> TryGetControlNet(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Get a list of all pending tasks
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="HttpRequestException"/>
+    /// <exception cref="InvalidOperationException"/>
+    /// <exception cref="OperationCanceledException"/>
+    public Task<IReadOnlyList<string>> PendingTasks(CancellationToken cancellationToken = default);
 }

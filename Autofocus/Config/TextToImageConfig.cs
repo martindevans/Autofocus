@@ -27,6 +27,8 @@ public record TextToImageConfig
     public List<IAdditionalScriptConfig?> AdditionalScripts { get; set; } = new();
     public IScriptConfig? Script { get; set; }
 
+    public string? TaskId { get; set; }
+
     //"firstphase_width": 0,
     //"firstphase_height": 0,
     //"hr_second_pass_steps": 0,
@@ -109,6 +111,9 @@ internal class TextToImageConfigRequest
     [JsonPropertyName("restore_faces")]
     public bool RestoreFaces { get; init; }
 
+    [JsonPropertyName("force_task_id")]
+    public string? ForceTaskId { get; set; }
+
 
     [JsonPropertyName("enable_hr")]
     public bool EnableHr { get; init; }
@@ -163,6 +168,7 @@ internal class TextToImageConfigRequest
         Batches = config.Batches;
         BatcheSize = config.BatchSize;
         RestoreFaces = config.RestoreFaces;
+        ForceTaskId = config.TaskId;
         EnableHr = config.HighRes != null;
         if (config.HighRes != null)
         {

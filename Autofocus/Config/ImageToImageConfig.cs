@@ -34,6 +34,8 @@ public record ImageToImageConfig
     public List<IAdditionalScriptConfig?> AdditionalScripts { get; set; } = new();
     public IScriptConfig? Script { get; set; }
 
+    public string? TaskId { get; set; }
+
     /*
      * {
   "resize_mode": 0,
@@ -155,6 +157,9 @@ internal class ImageToImageConfigRequest
     [JsonPropertyName("include_init_images")]
     public bool IncludeInitImages { get; set; }
 
+    [JsonPropertyName("force_task_id")]
+    public string? ForceTaskId { get; set; }
+
 
     [JsonPropertyName("script_name"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? ScriptName { get; init; }
@@ -200,6 +205,7 @@ internal class ImageToImageConfigRequest
         InpaintingFill = (int?)config.InpaintingFill;
         InpaintingMaskInvert = config.InpaintingMaskInvert;
         IncludeInitImages = false;
+        ForceTaskId = config.TaskId;
 
         if (config.Script != null)
         {

@@ -86,8 +86,20 @@ public class StableDiffusion
     /// <inheritdoc />
     public async Task<IProgress> Progress(bool skipCurrentImage = false, CancellationToken cancellationToken = default)
     {
-        return (await FastHttpClient.GetFromJsonAsync<ProgressResponse>($"/sdapi/v1/progress?skip_current_image={skipCurrentImage}",
-            SerializerOptions, cancellationToken))!;
+        return (await FastHttpClient.GetFromJsonAsync<ProgressResponse>(
+            $"/sdapi/v1/progress?skip_current_image={skipCurrentImage}",
+            SerializerOptions,
+            cancellationToken
+        ))!;
+    }
+
+    public async Task<IReadOnlyList<string>> PendingTasks(CancellationToken cancellationToken = default)
+    {
+        return (await FastHttpClient.GetFromJsonAsync<PendingTaskListResponse>(
+            "/internal/pending-tasks",
+            SerializerOptions,
+            cancellationToken
+        ))!.Tasks;
     }
 
     /// <inheritdoc />

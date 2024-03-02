@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.ImageSharp", "Aut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.Extensions.AfterDetailer", "Autofocus.Extensions.AfterDetailer\Autofocus.Extensions.AfterDetailer.csproj", "{C0782777-AD03-4539-8681-27A8C188C6C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.Outpaint", "Autofocus.Outpaint\Autofocus.Outpaint.csproj", "{62D1B959-3DE7-4AED-99C3-DF130F5BCDE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus.Outpaint", "Autofocus.Outpaint\Autofocus.Outpaint.csproj", "{62D1B959-3DE7-4AED-99C3-DF130F5BCDE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
