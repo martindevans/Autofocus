@@ -16,10 +16,6 @@ public interface IStableDiffusion
 
     /// <exception cref="HttpRequestException"/>
     /// <exception cref="OperationCanceledException"/>
-    public Task<IQueueStatus> QueueStatus(CancellationToken cancellationToken = default);
-
-    /// <exception cref="HttpRequestException"/>
-    /// <exception cref="OperationCanceledException"/>
     public Task<IScriptsResponse> Scripts(CancellationToken cancellationToken = default);
 
     /// <exception cref="HttpRequestException"/>
@@ -100,5 +96,13 @@ public interface IStableDiffusion
     /// <exception cref="HttpRequestException"/>
     /// <exception cref="InvalidOperationException"/>
     /// <exception cref="OperationCanceledException"/>
-    public Task<IReadOnlyList<string>> PendingTasks(CancellationToken cancellationToken = default);
+    public Task<IPendingTasks> PendingTasks(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Get the progress for a specific task
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<IInternalProgress> InternalProgress(string id, CancellationToken cancellationToken = default);
 }

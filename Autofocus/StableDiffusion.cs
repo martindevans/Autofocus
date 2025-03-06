@@ -93,15 +93,6 @@ public class StableDiffusion
         ))!;
     }
 
-    public async Task<IReadOnlyList<string>> PendingTasks(CancellationToken cancellationToken = default)
-    {
-        return (await FastHttpClient.GetFromJsonAsync<PendingTaskListResponse>(
-            "/internal/pending-tasks",
-            SerializerOptions,
-            cancellationToken
-        ))!.Tasks;
-    }
-
     /// <inheritdoc />
     public async Task Ping(CancellationToken cancellationToken = default)
     {
@@ -109,9 +100,27 @@ public class StableDiffusion
     }
 
     /// <inheritdoc />
-    public async Task<IQueueStatus> QueueStatus(CancellationToken cancellationToken = default)
+    public async Task<IPendingTasks> PendingTasks(CancellationToken cancellationToken = default)
     {
-        return (await FastHttpClient.GetFromJsonAsync<QueueStatusResponse>("/queue/status", SerializerOptions, cancellationToken))!;
+        return (await FastHttpClient.GetFromJsonAsync<PendingTasksResponse>("/internal/pending-tasks", SerializerOptions, cancellationToken))!;
+    }
+
+    /// <inheritdoc />
+    public async Task<IInternalProgress> InternalProgress(string id, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var request = new InternalProgressRequest(id);
+
+        var response = await SlowHttpClient.PostAsJsonAsync("/internal/progress", request, SerializerOptions, cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var result = await response
+                          .EnsureSuccessStatusCode()
+                          .Content
+                          .ReadFromJsonAsync<InternalProgressResponse>(SerializerOptions, cancellationToken);
+
+        return result!;
     }
 
     #region scripts
