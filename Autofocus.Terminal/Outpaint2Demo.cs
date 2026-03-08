@@ -55,7 +55,7 @@ public class Outpaint2Demo
         var outpaintPrompt = genPrompt;
 
         // Outpaint
-        var outpainter = new TwoStepOutpainter(api, model, await api.Sampler("DDIM"))
+        var outpainter = new TwoStepOutpainter(api, model, new SamplerConfig { Sampler = await api.Sampler("DDIM") })
         {
             UseControlNetTile = false,
         };

@@ -22,7 +22,7 @@ public class TwoStepOutpainter
 {
     private readonly IStableDiffusion _api;
     private readonly IStableDiffusionModel _model;
-    private readonly ISampler _sampler;
+    private readonly SamplerConfig _sampler;
 
     private readonly GraphicsOptions _drawingOptions;
 
@@ -35,7 +35,7 @@ public class TwoStepOutpainter
 
     public bool UseControlNetTile { get; set; } = true;
 
-    public TwoStepOutpainter(IStableDiffusion api, IStableDiffusionModel model, ISampler sampler)
+    public TwoStepOutpainter(IStableDiffusion api, IStableDiffusionModel model, SamplerConfig sampler)
     {
         _api = api;
         _model = model;
@@ -140,9 +140,8 @@ public class TwoStepOutpainter
 
                 ClipSkip = 2,
 
-                Sampler = new()
+                Sampler = _sampler with
                 {
-                    Sampler = _sampler,
                     SamplingSteps = Steps1,
                     CfgScale = 6
                 },
@@ -209,9 +208,8 @@ public class TwoStepOutpainter
             Prompt = prompt,
             Seed = seed,
 
-            Sampler = new()
+            Sampler = _sampler with
             {
-                Sampler = _sampler,
                 SamplingSteps = Steps2,
                 CfgScale = 8
             },
