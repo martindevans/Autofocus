@@ -48,6 +48,11 @@ public class StableDiffusion
     /// The endpoint that will be fetched when <see cref="Ping"/> is called
     /// </summary>
     public string PingEndpoint { get; set; } = "/internal/ping";
+    
+    /// <summary>
+    /// Indicates if the <see cref="Progress"/> endpoint is available.
+    /// </summary>
+    public bool EnableProgress { get; set; } = true;
 
     public StableDiffusion(string? address = null)
         : this(address == null ? new Uri("http://127.0.0.1:7860") : new Uri(address))
@@ -91,6 +96,17 @@ public class StableDiffusion
     /// <inheritdoc />
     public async Task<IProgress> Progress(bool skipCurrentImage = false, CancellationToken cancellationToken = default)
     {
+        if (!EnableProgress)
+        {
+            return new ProgressResponse()
+            {
+                CurrentImage = null,
+                EtaRelative = 1,
+                Progress = 0.5,
+                State = new ProgressStateResponse()
+            };
+        }
+
         return (await FastHttpClient.GetFromJsonAsync<ProgressResponse>(
             $"/sdapi/v1/progress?skip_current_image={skipCurrentImage}",
             SerializerOptions,

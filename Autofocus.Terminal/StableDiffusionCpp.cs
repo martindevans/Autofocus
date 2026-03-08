@@ -10,8 +10,11 @@ public class StableDiffusionCpp
         var api = new StableDiffusion("http://martin-ai-server:1234")
         {
             PingEndpoint = "/",
+            EnableProgress = false,
         };
+
         await api.Ping();
+        await api.Progress(true);
 
         var model = await api.StableDiffusionModel("cardosAnime_v20");
 
