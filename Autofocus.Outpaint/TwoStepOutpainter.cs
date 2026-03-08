@@ -3,6 +3,7 @@ using Autofocus.CtrlNet;
 using Autofocus.ImageSharp.Extensions;
 using Autofocus.Models;
 using Autofocus.Outpaint.Extensions;
+using Autofocus.Utilities.Progress;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;

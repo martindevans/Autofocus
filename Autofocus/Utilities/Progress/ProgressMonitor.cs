@@ -1,6 +1,6 @@
-﻿namespace Autofocus.Outpaint
+﻿namespace Autofocus.Utilities.Progress
 {
-    internal class ProgressMonitor
+    public class ProgressMonitor
     {
         public event Func<ProgressReport, Task>? ProgressEvent;
 

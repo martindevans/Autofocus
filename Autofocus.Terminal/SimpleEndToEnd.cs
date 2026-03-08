@@ -9,7 +9,7 @@ public class SimpleEndToEnd
 {
     public async Task Run()
     {
-        var api = new StableDiffusion();
+        var api = new StableDiffusion("http://martin-ai-server:1234");
         await api.Ping();
 
         var cnet = await api.TryGetControlNet() ?? throw new NotImplementedException("no controlnet!");

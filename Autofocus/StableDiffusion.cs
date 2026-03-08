@@ -44,6 +44,11 @@ public class StableDiffusion
         init => SlowHttpClient.Timeout = value;
     }
 
+    /// <summary>
+    /// The endpoint that will be fetched when <see cref="Ping"/> is called
+    /// </summary>
+    public string PingEndpoint { get; set; } = "/internal/ping";
+
     public StableDiffusion(string? address = null)
         : this(address == null ? new Uri("http://127.0.0.1:7860") : new Uri(address))
     {
@@ -96,7 +101,7 @@ public class StableDiffusion
     /// <inheritdoc />
     public async Task Ping(CancellationToken cancellationToken = default)
     {
-        (await FastHttpClient.GetAsync("/internal/ping", cancellationToken)).EnsureSuccessStatusCode();
+        (await FastHttpClient.GetAsync(PingEndpoint, cancellationToken)).EnsureSuccessStatusCode();
     }
 
     /// <inheritdoc />
