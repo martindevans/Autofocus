@@ -19,6 +19,7 @@ public class StableDiffusionCpp
         var model = await api.StableDiffusionModel("cardosAnime_v20");
 
         var sampler = await api.Sampler("Euler_a");
+        var scheduler = await api.Scheduler("karras");
 
         var txt2img = await api.TextToImage(
             new()
@@ -35,6 +36,7 @@ public class StableDiffusionCpp
                 {
                     Sampler = sampler,
                     SamplingSteps = 20,
+                    Scheduler = scheduler,
                 },
 
                 Model = model,

@@ -29,6 +29,15 @@ public interface IStableDiffusion
 
     /// <exception cref="HttpRequestException"/>
     /// <exception cref="OperationCanceledException"/>
+    public Task<IEnumerable<IScheduler>> Schedulers(CancellationToken cancellationToken = default);
+
+    /// <exception cref="HttpRequestException"/>
+    /// <exception cref="InvalidOperationException"/>  
+    /// <exception cref="OperationCanceledException"/>
+    public Task<IScheduler> Scheduler(string name, CancellationToken cancellationToken = default);
+
+    /// <exception cref="HttpRequestException"/>
+    /// <exception cref="OperationCanceledException"/>
     public Task<IEnumerable<IUpscaler>> Upscalers(CancellationToken cancellationToken = default);
 
     /// <exception cref="HttpRequestException"/>

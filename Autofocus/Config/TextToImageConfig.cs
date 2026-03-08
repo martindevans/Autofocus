@@ -95,6 +95,9 @@ internal class TextToImageConfigRequest
 
     [JsonPropertyName("sampler_name"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? SamplerName { get; init; }
+    
+    [JsonPropertyName("scheduler"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Scheduler { get; init; }
 
     [JsonPropertyName("cfg_scale"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public float? CfgScale { get; init; }
@@ -163,6 +166,7 @@ internal class TextToImageConfigRequest
         SeedResizeFromHeight = config.Seed.SeedResizeFromHeight;
         SamplingSteps = config.Sampler.SamplingSteps;
         SamplerName = config.Sampler.Sampler.Name;
+        Scheduler = config.Sampler.Scheduler?.Name;
         CfgScale = (float?)config.Sampler.CfgScale;
         Eta = (float?)config.Sampler.Eta;
         Batches = config.Batches;

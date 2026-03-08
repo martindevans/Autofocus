@@ -8,4 +8,5 @@ public record SamplerConfig
     public int? SamplingSteps { get; set; }
     public double? CfgScale { get; set; }
     public double? Eta { get; set; }
+    public IScheduler? Scheduler { get; set; }
 }
