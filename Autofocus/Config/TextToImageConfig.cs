@@ -29,6 +29,8 @@ public record TextToImageConfig
 
     public string? TaskId { get; set; }
 
+    public LoraConfig[] Lora { get; set; } = [];
+
     //"firstphase_width": 0,
     //"firstphase_height": 0,
     //"hr_second_pass_steps": 0,
@@ -117,6 +119,9 @@ internal class TextToImageConfigRequest
     [JsonPropertyName("force_task_id")]
     public string? ForceTaskId { get; set; }
 
+    [JsonPropertyName("lora")]
+    public LoraConfig[] Lora { get; set; }
+
 
     [JsonPropertyName("enable_hr")]
     public bool EnableHr { get; init; }
@@ -173,6 +178,7 @@ internal class TextToImageConfigRequest
         BatcheSize = config.BatchSize;
         RestoreFaces = config.RestoreFaces;
         ForceTaskId = config.TaskId;
+        Lora = config.Lora;
         EnableHr = config.HighRes != null;
         if (config.HighRes != null)
         {

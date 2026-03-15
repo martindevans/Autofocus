@@ -1,10 +1,17 @@
-﻿using Autofocus.Terminal;
+﻿using Autofocus;
+using Autofocus.Terminal;
 
-//await new SimpleEndToEnd().Run();
-await new StableDiffusionCpp().Run();
-//await new VideoPrototyping().Run();
-//await new TiledUpscalerPrototype().Run();
-//await new AfterDetailerDemo().Run();
-//await new Outpaint2Demo().Run();
-//await new Queueing().Run();
-//await new PixelArt().Run();
+var api = new StableDiffusion("http://martin-ai-server:1234")
+{
+    PingEndpoint = "/",
+    EnableProgress = false,
+};
+
+//await new SimpleEndToEnd().Run(api);
+await new StableDiffusionCpp().Run(api);
+//await new VideoPrototyping().Run(api);
+//await new TiledUpscalerPrototype().Run(api);
+//await new AfterDetailerDemo().Run(api);
+//await new Outpaint2Demo().Run(api);
+//await new Queueing().Run(api);
+//await new PixelArt().Run(api);

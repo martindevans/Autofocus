@@ -5,21 +5,15 @@ namespace Autofocus.Terminal;
 
 public class StableDiffusionCpp
 {
-    public async Task Run()
+    public async Task Run(StableDiffusion api)
     {
-        var api = new StableDiffusion("http://martin-ai-server:1234")
-        {
-            PingEndpoint = "/",
-            EnableProgress = false,
-        };
-
         await api.Ping();
         await api.Progress(true);
 
-        var model = await api.StableDiffusionModel("cardosAnime_v20");
+        var model = await api.StableDiffusionModel("waiANIPONYXL_v140_q4k");
 
-        var sampler = await api.Sampler("Euler_a");
-        var scheduler = await api.Scheduler("karras");
+        var sampler = await api.Sampler("lcm");
+        var scheduler = await api.Scheduler("lcm");
 
         var txt2img = await api.TextToImage(
             new()
@@ -29,21 +23,26 @@ public class StableDiffusionCpp
                 Prompt = new()
                 {
                     Positive = "1girl, backpack, outdoors, mountains, sunny, frilled_skirt, glasses, looking_at_viewer, short_hair, short_sleeves, skirt, smile, solo, standing, thighhighs",
-                    Negative = "disfigured, bad art, bad quality, low quality, blurry, poorly drawn, mutated, out of frame, bad anatomy, bad anatomy, nsfw",
+                    Negative = "easynegative, badhandv4, nsfw",
                 },
 
                 Sampler = new()
                 {
                     Sampler = sampler,
-                    SamplingSteps = 20,
+                    SamplingSteps = 10,
                     Scheduler = scheduler,
+                    CfgScale = 1.75f
                 },
 
                 Model = model,
-                BatchSize = 4,
+                BatchSize = 1,
                 Batches = 1,
-                Height = 512,
-                Width = 512,
+                Width = 1216,
+                Height = 832,
+
+                Lora = [
+                    new("lcm_sdxl.safetensors"),
+                ],
 
                 AdditionalScripts = {
                     null
@@ -52,6 +51,6 @@ public class StableDiffusionCpp
         );
 
         for (var i = 0; i < txt2img.Images.Count; i++)
-            await (await txt2img.Images[i].ToImageSharpAsync()).SaveAsPngAsync($"txt2img_image{i}.png");
+            await (await txt2img.Images[i].ToImageSharpAsync()).SaveAsPngAsync($"sdcpp_txt2img_image{i}.png");
     }
 }

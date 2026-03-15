@@ -304,6 +304,11 @@ public class StableDiffusion
         var response = await SlowHttpClient.PostAsJsonAsync("/sdapi/v1/txt2img", request, SerializerOptions, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
 
+        if (!response.IsSuccessStatusCode)
+        {
+            var bad = await response.Content.ReadAsStringAsync(cancellationToken);
+        }
+
         var result = await response
                           .EnsureSuccessStatusCode()
                           .Content

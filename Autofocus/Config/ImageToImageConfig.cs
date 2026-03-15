@@ -36,6 +36,8 @@ public record ImageToImageConfig
 
     public string? TaskId { get; set; }
 
+    public LoraConfig[] Lora { get; set; } = [ ];
+
     /*
      * {
   "resize_mode": 0,
@@ -160,6 +162,9 @@ internal class ImageToImageConfigRequest
     [JsonPropertyName("force_task_id")]
     public string? ForceTaskId { get; set; }
 
+    [JsonPropertyName("lora")]
+    public LoraConfig[] Lora { get; set; }
+
 
     [JsonPropertyName("script_name"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? ScriptName { get; init; }
@@ -206,6 +211,7 @@ internal class ImageToImageConfigRequest
         InpaintingMaskInvert = config.InpaintingMaskInvert;
         IncludeInitImages = false;
         ForceTaskId = config.TaskId;
+        Lora = config.Lora;
 
         if (config.Script != null)
         {

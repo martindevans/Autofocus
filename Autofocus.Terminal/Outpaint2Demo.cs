@@ -7,18 +7,13 @@ namespace Autofocus.Terminal;
 
 public class Outpaint2Demo
 {
-    const int FRAME_COUNT = 1;
-    const bool CREATE_GIF = false;
-
-    public async Task Run()
+    public async Task Run(StableDiffusion api)
     {
-        var api = new StableDiffusion();
         await api.Ping();
 
         var genPrompt = new PromptConfig
         {
-            Positive = "that thing I left in that place that one time",
-            //Positive = "1girl, white hair, purple eyes, black choker, slight smile, mountains, clouds, sky",
+            Positive = "1girl, white hair, purple eyes, black choker, slight smile, mountains, clouds, sky",
             Negative = "easynegative, badhandv4",
         };
 
@@ -31,7 +26,8 @@ public class Outpaint2Demo
 
             Sampler = new()
             {
-                Sampler = await api.Sampler("UniPC"),
+                Sampler = await api.Sampler("dpm++2m"),
+                Scheduler = await api.Scheduler("karras"),
                 SamplingSteps = 20,
             },
 
@@ -55,7 +51,11 @@ public class Outpaint2Demo
         var outpaintPrompt = genPrompt;
 
         // Outpaint
-        var outpainter = new TwoStepOutpainter(api, model, new SamplerConfig { Sampler = await api.Sampler("DDIM") })
+        var outpainter = new TwoStepOutpainter(api, model, new SamplerConfig
+        {
+            Sampler = await api.Sampler("dpm++2m"),
+            Scheduler = await api.Scheduler("karras"),
+        })
         {
             UseControlNetTile = false,
         };
