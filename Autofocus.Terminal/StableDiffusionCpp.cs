@@ -14,6 +14,7 @@ public class StableDiffusionCpp
 
         var sampler = await api.Sampler("lcm");
         var scheduler = await api.Scheduler("lcm");
+        var lora = await api.Lora("lcm_sdxl");
 
         var txt2img = await api.TextToImage(
             new()
@@ -41,7 +42,7 @@ public class StableDiffusionCpp
                 Height = 832,
 
                 Lora = [
-                    new("lcm_sdxl.safetensors"),
+                    new(lora),
                 ],
 
                 AdditionalScripts = {

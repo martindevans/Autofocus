@@ -23,6 +23,7 @@ public class TwoStepOutpainter
     private readonly IStableDiffusion _api;
     private readonly IStableDiffusionModel _model;
     private readonly SamplerConfig _sampler;
+    private readonly LoraConfig[] _loras;
 
     private readonly GraphicsOptions _drawingOptions;
 
@@ -35,11 +36,12 @@ public class TwoStepOutpainter
 
     public bool UseControlNetTile { get; set; } = true;
 
-    public TwoStepOutpainter(IStableDiffusion api, IStableDiffusionModel model, SamplerConfig sampler)
+    public TwoStepOutpainter(IStableDiffusion api, IStableDiffusionModel model, SamplerConfig sampler, LoraConfig[]? loras = null)
     {
         _api = api;
         _model = model;
         _sampler = sampler;
+        _loras = loras ?? [];
 
         _drawingOptions = new GraphicsOptions
         {
@@ -145,6 +147,7 @@ public class TwoStepOutpainter
                     SamplingSteps = Steps1,
                     CfgScale = 6
                 },
+                Lora = _loras,
 
                 AdditionalScripts =
                 {
@@ -213,6 +216,7 @@ public class TwoStepOutpainter
                 SamplingSteps = Steps2,
                 CfgScale = 8
             },
+            Lora = _loras,
         });
 
         return result2.Images;

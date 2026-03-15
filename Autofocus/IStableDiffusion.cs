@@ -38,6 +38,14 @@ public interface IStableDiffusion
 
     /// <exception cref="HttpRequestException"/>
     /// <exception cref="OperationCanceledException"/>
+    public Task<IEnumerable<ILora>> Loras(CancellationToken cancellationToken = default);
+
+    /// <exception cref="HttpRequestException"/>
+    /// <exception cref="OperationCanceledException"/>
+    public Task<ILora> Lora(string name, CancellationToken cancellationToken = default);
+
+    /// <exception cref="HttpRequestException"/>
+    /// <exception cref="OperationCanceledException"/>
     public Task<IEnumerable<IUpscaler>> Upscalers(CancellationToken cancellationToken = default);
 
     /// <exception cref="HttpRequestException"/>

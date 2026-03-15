@@ -186,6 +186,26 @@ public class StableDiffusion
     }
     #endregion
 
+    #region LoRA
+    /// <inheritdoc />
+    public async Task<IEnumerable<ILora>> Loras(CancellationToken cancellationToken = default)
+    {
+        return (await FastHttpClient.GetFromJsonAsync<LoraResponse[]>("/sdapi/v1/loras", SerializerOptions, cancellationToken))!;
+    }
+
+    /// <inheritdoc />
+    public async Task<ILora> Lora(string name, CancellationToken cancellationToken = default)
+    {
+        var loras = await Loras(cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return loras.Single(
+            a => a.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)
+              || a.Path.Equals(name, StringComparison.InvariantCultureIgnoreCase)
+        );
+    }
+    #endregion
+
     #region upscaler
     /// <inheritdoc />
     public async Task<IEnumerable<IUpscaler>> Upscalers(CancellationToken cancellationToken = default)
@@ -303,11 +323,6 @@ public class StableDiffusion
 
         var response = await SlowHttpClient.PostAsJsonAsync("/sdapi/v1/txt2img", request, SerializerOptions, cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var bad = await response.Content.ReadAsStringAsync(cancellationToken);
-        }
 
         var result = await response
                           .EnsureSuccessStatusCode()

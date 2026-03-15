@@ -1,18 +1,22 @@
 ﻿using System.Text.Json.Serialization;
+using Autofocus.Models;
 
 namespace Autofocus.Config;
 
 public record LoraConfig
 {
-    public LoraConfig(string path, float multiplier = 1.0f, bool isHighNoise = false)
+    public LoraConfig(ILora lora, float multiplier = 1.0f, bool isHighNoise = false)
     {
-        Path = path;
+        Lora = lora;
+
         Multiplier = multiplier;
         IsHighNoise = isHighNoise;
     }
 
+    public ILora Lora { get; }
+
     [JsonPropertyName("path")]
-    public string Path { get; set; }
+    public string Path => Lora.Path;
 
     [JsonPropertyName("multiplier")]
     public float Multiplier { get; set; }
