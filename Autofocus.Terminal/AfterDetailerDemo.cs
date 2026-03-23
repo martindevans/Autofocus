@@ -7,9 +7,8 @@ namespace Autofocus.Terminal;
 
 public class AfterDetailerDemo
 {
-    public async Task Run()
+    public async Task Run(IStableDiffusion api)
     {
-        var api = new StableDiffusion();
         await api.Ping();
 
         var config = new TextToImageConfig
