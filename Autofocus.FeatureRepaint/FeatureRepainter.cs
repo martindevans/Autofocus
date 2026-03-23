@@ -101,7 +101,11 @@ namespace Autofocus.FeatureRepaint
         /// <param name="strength"></param>
         public async Task<Image> Repaint(Image input, AnalysisResult analysis, IReadOnlyList<FacePrompt> prompts, ushort blend = 32, double strength = 0.4)
         {
+            if (prompts.Count == 0)
+                throw new ArgumentException("Must supply at least one prompt", nameof(prompts));
+
             var output = input.CloneAs<Rgb24>();
+            using var input24 = input.CloneAs<Rgb24>();
 
             for (var i = 0; i < analysis.Faces.Count; i++)
             {
@@ -114,8 +118,7 @@ namespace Autofocus.FeatureRepaint
                 faceBound.Inflate(blend / 2, blend / 2);
                 var subbox = FitAspectBoxFlexible(faceBound, input.Bounds.AspectRatio(), input.Bounds, out var altRatio);
 
-                using var faceBox = input.CloneAs<Rgb24>();
-                faceBox.Mutate(ctx =>
+                using var faceBox = input24.Clone(ctx =>
                 {
                     ctx.Crop(subbox);
 

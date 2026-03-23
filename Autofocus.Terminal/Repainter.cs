@@ -44,10 +44,6 @@ public class Repainter
                 Lora = [
                     new(await api.Lora("lcm_sdxl")),
                 ],
-
-                AdditionalScripts = {
-                    null
-                },
             }
         );
 
