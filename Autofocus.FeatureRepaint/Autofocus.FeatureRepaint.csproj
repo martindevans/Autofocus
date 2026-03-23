@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version>1.0.0</Version>
+    <Title>Autofocus.FeatureRepaint</Title>
+    <Description>Auto detect faces in an image and repaint them at higher resolution.</Description>
   </PropertyGroup>
 
   <ItemGroup>

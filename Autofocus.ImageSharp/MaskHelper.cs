@@ -20,6 +20,11 @@ public static class MaskHelper
         var mask = new Image<Rgb24>(width, height);
         mask.Mutate(ctx =>
         {
+            if (blur * 2 >= width)
+                blur = width / 2;
+            if (blur * 2 >= height)
+                blur = height / 2;
+
             var rect = new RectangleF(blur, blur, width - blur * 2, height - blur * 2);
 
             ctx.Fill(focusEdges ? Color.White : Color.Black)

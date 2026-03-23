@@ -35,16 +35,16 @@ namespace Autofocus.FeatureRepaint
         /// <param name="img"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public Task<AnalysisResult> Analyse(Image img, AnalysisConfig config)
+        public async Task<AnalysisResult> Analyse(Image img, AnalysisConfig config)
         {
             if (img is Image<Rgb24> cast)
             {
-                return Analyse(cast, config);
+                return await Analyse(cast, config);
             }
             else
             {
                 using var img24 = img.CloneAs<Rgb24>();
-                return Analyse(img24, config);
+                return await Analyse(img24, config);
             }
         }
 
