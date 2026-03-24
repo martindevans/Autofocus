@@ -99,7 +99,7 @@ namespace Autofocus.FeatureRepaint
         /// <param name="prompts"></param>
         /// <param name="blend">How many pixels to expand, use this space for blending</param>
         /// <param name="strength"></param>
-        public async Task<Image> Repaint(Image input, AnalysisResult analysis, IReadOnlyList<FacePrompt> prompts, ushort blend = 32, double strength = 0.6)
+        public async Task<Image<Rgb24>> Repaint(Image input, AnalysisResult analysis, IReadOnlyList<FacePrompt> prompts, ushort blend = 32, double strength = 0.6)
         {
             if (prompts.Count == 0)
                 throw new ArgumentException("Must supply at least one prompt", nameof(prompts));
