@@ -1,7 +1,7 @@
 ﻿using Autofocus;
 using Autofocus.Terminal;
 
-var api = new StableDiffusion("http://martin-ai-server:1234")
+var api = new StableDiffusion("http://martin-strix:1234")
 {
     PingEndpoint = "/",
     EnableProgress = false,

@@ -99,7 +99,7 @@ namespace Autofocus.FeatureRepaint
         /// <param name="prompts"></param>
         /// <param name="blend">How many pixels to expand, use this space for blending</param>
         /// <param name="strength"></param>
-        public async Task<Image> Repaint(Image input, AnalysisResult analysis, IReadOnlyList<FacePrompt> prompts, ushort blend = 32, double strength = 0.4)
+        public async Task<Image> Repaint(Image input, AnalysisResult analysis, IReadOnlyList<FacePrompt> prompts, ushort blend = 32, double strength = 0.6)
         {
             if (prompts.Count == 0)
                 throw new ArgumentException("Must supply at least one prompt", nameof(prompts));
@@ -115,7 +115,7 @@ namespace Autofocus.FeatureRepaint
                 var promptFace = string.Join(", ", prompt.Face, prompt.Eyes);
 
                 var faceBound = face.Bounds;
-                faceBound.Inflate(blend / 2, blend / 2);
+                faceBound.Inflate(blend, blend);
                 var subbox = FitAspectBoxFlexible(faceBound, input.Bounds.AspectRatio(), input.Bounds, out var altRatio);
 
                 using var faceBox = input24.Clone(ctx =>
@@ -128,7 +128,7 @@ namespace Autofocus.FeatureRepaint
                         ctx.Resize(input.Width, input.Height);
                 });
 
-                using var mask = MaskHelper.CreateBlurOutlineMask(faceBox.Width, faceBox.Height, blend);
+                using var mask = MaskHelper.CreateEllipseBlurOutlineMask(faceBox.Width, faceBox.Height, blend);
 
                 var img2img = await _api.Image2Image(
                     new()

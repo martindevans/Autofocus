@@ -1,4 +1,5 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -15,7 +16,7 @@ public static class MaskHelper
     /// <param name="blur">Band thickness in pixels</param>
     /// <param name="focusEdges"></param>
     /// <returns></returns>
-    public static Image<Rgb24> CreateBlurOutlineMask(int width, int height, int blur, bool focusEdges = false)
+    public static Image<Rgb24> CreateSquareBlurOutlineMask(int width, int height, int blur, bool focusEdges = false)
     {
         var mask = new Image<Rgb24>(width, height);
         mask.Mutate(ctx =>
@@ -29,6 +30,39 @@ public static class MaskHelper
 
             ctx.Fill(focusEdges ? Color.White : Color.Black)
                .Fill(focusEdges ? Color.Black : Color.White, rect)
+               .BoxBlur(blur);
+        });
+
+        return mask;
+    }
+
+    /// <summary>
+    /// Create a mask with one solid ellipse in the middle, blurred
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="blur"></param>
+    /// <param name="focusEdges"></param>
+    /// <returns></returns>
+    public static Image<Rgb24> CreateEllipseBlurOutlineMask(int width, int height, int blur, bool focusEdges = false)
+    {
+        var mask = new Image<Rgb24>(width, height);
+        mask.Mutate(ctx =>
+        {
+            if (blur * 2 >= width)
+                blur = width / 2;
+            if (blur * 2 >= height)
+                blur = height / 2;
+
+            var ellipse = new EllipsePolygon(
+                width / 2f,
+                height / 2f,
+                width - blur * 2,
+                height - blur * 2
+            );
+
+            ctx.Fill(focusEdges ? Color.White : Color.Black)
+               .Fill(focusEdges ? Color.Black : Color.White, ellipse)
                .BoxBlur(blur);
         });
 
