@@ -19,14 +19,14 @@ namespace Autofocus.FeatureRepaint
 
         private readonly IFaceDetectorWithLandmarks _detector;
 
-        public FeatureRepainter(IStableDiffusion api, IStableDiffusionModel model, SamplerConfig sampler, LoraConfig[]? loras = null)
+        public FeatureRepainter(IStableDiffusion api, IStableDiffusionModel model, SamplerConfig sampler, LoraConfig[]? loras = null, IFaceDetectorWithLandmarks? detector = null)
         {
             _api = api;
             _model = model;
             _sampler = sampler;
             _loras = loras ?? [];
 
-            _detector = FaceAiSharpBundleFactory.CreateFaceDetectorWithLandmarks();
+            _detector = detector ?? FaceAiSharpBundleFactory.CreateFaceDetectorWithLandmarks();
         }
 
         /// <summary>
