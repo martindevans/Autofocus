@@ -20,19 +20,19 @@ public class Repainter
         {
             Sampler = await api.Sampler("lcm"),
             Scheduler = await api.Scheduler("lcm"),
-            SamplingSteps = 7,
-            CfgScale = 1.75f
+            SamplingSteps = 10,
+            CfgScale = 1.75
         };
 
         // Generate the input image
         var txt2img = await api.TextToImage(
             new()
             {
-                Seed = 23,
+                Seed = -1,
                 Prompt = new()
                 {
-                    Positive = "2girls, backpack, outdoors, mountains, sunny, looking at viewer, short hair, short sleeves, skirt, smile, solo, standing, thighhighs",
-                    Negative = "easynegative, badhandv4, nsfw",
+                    Positive = "score_9, score_8_up, score_7_up, source_anime, 2girls, backpack, outdoors, mountains, sunny, looking at viewer, short hair, short sleeves, skirt, smile, solo, standing, thighhighs",
+                    Negative = "score_6, score_5, score_4, source_cartoon, monochrome, blurry, lowres, watermark, easynegative, badhandv4, nsfw",
                 },
                 Sampler = sampler,
                 Model = model,
@@ -51,8 +51,16 @@ public class Repainter
         using var input = await txt2img.Images[0].ToImageSharpAsync();
         await input.SaveAsPngAsync("repainter_input.png");
 
+        var sampler2 = new SamplerConfig()
+        {
+            Sampler = await api.Sampler("dpm++2mv2"),
+            Scheduler = await api.Scheduler("karras"),
+            SamplingSteps = 10,
+            CfgScale = 4f
+        };
+
         // Find features
-        var repainter = new FeatureRepainter(api, model, sampler, [ new(await api.Lora("lcm_sdxl")) ]);
+        var repainter = new FeatureRepainter(api, model, sampler2);
         var analysis = await repainter.Analyse(input, new AnalysisConfig());
 
         // Draw face boxes

@@ -1,5 +1,11 @@
 ﻿using Autofocus;
+using Autofocus.Outpaint.Extensions;
 using Autofocus.Terminal;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 var api = new StableDiffusion("http://martin-strix:1234")
 {
@@ -15,4 +21,4 @@ var api = new StableDiffusion("http://martin-strix:1234")
 //await new Outpaint2Demo().Run(api);
 //await new Queueing().Run(api);
 //await new PixelArt().Run(api);
-await new Repainter().Run(api);
+//await new Repainter().Run(api);

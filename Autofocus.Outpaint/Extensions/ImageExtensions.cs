@@ -5,7 +5,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Autofocus.Outpaint.Extensions
 {
-    internal static class ImageExtensions
+    public static class ImageExtensions
     {
         public static void Bleed(this Image<Rgba32> image, Rectangle from, int radius, int? seed, float angleFactor = 0.5f)
         {
