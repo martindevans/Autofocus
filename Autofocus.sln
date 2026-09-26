@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.4.11612.150 stable
+VisualStudioVersion = 18.4.11612.150
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autofocus", "Autofocus\Autofocus.csproj", "{4E1B5B4F-D656-4B12-9411-3FF3D16F950D}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.PixelArt", "Autofocus.PixelArt\Autofocus.PixelArt.csproj", "{6A58E503-60A7-4E16-9FCB-17FC4FE367ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.FeatureRepaint", "Autofocus.FeatureRepaint\Autofocus.FeatureRepaint.csproj", "{C6C5893D-BF9A-4FCC-8758-00A1675A4D92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.SkiaSharp", "Autofocus.SkiaSharp\Autofocus.SkiaSharp.csproj", "{83C19C32-28B4-4FE0-9614-8D43E470DE36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{C6C5893D-BF9A-4FCC-8758-00A1675A4D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6C5893D-BF9A-4FCC-8758-00A1675A4D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6C5893D-BF9A-4FCC-8758-00A1675A4D92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83C19C32-28B4-4FE0-9614-8D43E470DE36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83C19C32-28B4-4FE0-9614-8D43E470DE36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83C19C32-28B4-4FE0-9614-8D43E470DE36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83C19C32-28B4-4FE0-9614-8D43E470DE36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

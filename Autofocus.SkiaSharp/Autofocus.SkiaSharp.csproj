@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Autofocus.SkiaSharp</Title>
+    <Version>3.1.0</Version>
+    <Authors>Martin Evans</Authors>
+    <PackageProjectUrl>https://github.com/martindevans/Autofocus</PackageProjectUrl>
+    <Description>Adds convenient extension methods to and from SkiaSharp images for Autofocus (Automatic1111 API wrapper).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="4.152.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Autofocus\Autofocus.csproj" />
+  </ItemGroup>
+
+</Project>
