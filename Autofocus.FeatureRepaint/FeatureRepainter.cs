@@ -1,5 +1,4 @@
 ﻿using Autofocus.Config;
-using Autofocus.FeatureRepaint.Extensions;
 using Autofocus.ImageSharp;
 using Autofocus.ImageSharp.Extensions;
 using Autofocus.Models;
@@ -77,17 +76,17 @@ namespace Autofocus.FeatureRepaint
                 var faces = from item in filtered
                             select new FaceDetection(
                                 ToIntRect(item.Box),
-                                item.Landmarks == null ? null : _detector.GetLeftEyeCenter(item.Landmarks),
-                                item.Landmarks == null ? null : _detector.GetRightEyeCenter(item.Landmarks)
+                                item.Landmarks == null ? null : _detector.GetLeftEyeCenter(item.Landmarks).ToSystemDrawing(),
+                                item.Landmarks == null ? null : _detector.GetRightEyeCenter(item.Landmarks).ToSystemDrawing()
                             );
 
                 // Return results
                 return new AnalysisResult(faces);
             });
 
-            static Rectangle ToIntRect(RectangleF rect)
+            static System.Drawing.Rectangle ToIntRect(RectangleF rect)
             {
-                return new Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height);
+                return new System.Drawing.Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height);
             }
         }
 
@@ -116,7 +115,7 @@ namespace Autofocus.FeatureRepaint
 
                 var faceBound = face.Bounds;
                 faceBound.Inflate(blend, blend);
-                var subbox = FitAspectBoxFlexible(faceBound, input.Bounds.AspectRatio(), input.Bounds, out var altRatio);
+                var subbox = FitAspectBoxFlexible(faceBound, input.Bounds.AspectRatio(), input.Bounds.ToSystemDrawing(), out var altRatio);
 
                 using var faceBox = input24.Clone(ctx =>
                 {
@@ -180,7 +179,7 @@ namespace Autofocus.FeatureRepaint
             return output;
         }
 
-        private static Rectangle FitAspectBoxFlexible(Rectangle detection, float aspectRatio, Rectangle imageBounds, out bool altRatio)
+        private static Rectangle FitAspectBoxFlexible(System.Drawing.Rectangle detection, float aspectRatio, System.Drawing.Rectangle imageBounds, out bool altRatio)
         {
             // Try both orientations
             var best = FitOne(detection, aspectRatio, imageBounds);
@@ -203,14 +202,14 @@ namespace Autofocus.FeatureRepaint
         /// <param name="ratio">The aspect ratio of the encompassing box (width / height)</param>
         /// <param name="outer">The outer bounds, final result must fit within this</param>
         /// <returns>A rectangle that encompasses inner as much as possible while obeying ratio and outer</returns>
-        private static Rectangle FitOne(Rectangle inner, float ratio, Rectangle outer)
+        private static Rectangle FitOne(System.Drawing.Rectangle inner, float ratio, System.Drawing.Rectangle outer)
         {
             // Create a box around "inner" with the right aspect ratio
             float targetWidth = inner.Width;
             float targetHeight = inner.Height;
 
             // Determine if we need to expand width or height to meet the ratio while encompassing 'inner'
-            if (inner.AspectRatio() > ratio)
+            if (Autofocus.Extensions.RectangleExtensions.AspectRatio(inner) > ratio)
                 targetHeight = targetWidth / ratio;
             else
                 targetWidth = targetHeight * ratio;
@@ -326,7 +325,7 @@ namespace Autofocus.FeatureRepaint
     /// <param name="Bounds"></param>
     /// <param name="LeftEye"></param>
     /// <param name="RightEye"></param>
-    public record FaceDetection(Rectangle Bounds, PointF? LeftEye, PointF? RightEye)
+    public record FaceDetection(System.Drawing.Rectangle Bounds, System.Drawing.PointF? LeftEye, System.Drawing.PointF? RightEye)
     {
         public float GetEyeRadius()
         {

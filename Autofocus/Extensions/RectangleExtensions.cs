@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace Autofocus.FeatureRepaint.Extensions;
+namespace Autofocus.Extensions;
 
-internal static class RectangleExtensions
+public static class RectangleExtensions
 {
     public static float AspectRatio(this Rectangle rect)
     {

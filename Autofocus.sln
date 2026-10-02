@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.FeatureRepaint", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.SkiaSharp", "Autofocus.SkiaSharp\Autofocus.SkiaSharp.csproj", "{83C19C32-28B4-4FE0-9614-8D43E470DE36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofocus.ImageMagick", "Autofocus.ImageMagick\Autofocus.ImageMagick.csproj", "{8C2C14E4-CB19-4593-8E76-46F0E40C2DD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{83C19C32-28B4-4FE0-9614-8D43E470DE36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83C19C32-28B4-4FE0-9614-8D43E470DE36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83C19C32-28B4-4FE0-9614-8D43E470DE36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C2C14E4-CB19-4593-8E76-46F0E40C2DD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C2C14E4-CB19-4593-8E76-46F0E40C2DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C2C14E4-CB19-4593-8E76-46F0E40C2DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C2C14E4-CB19-4593-8E76-46F0E40C2DD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

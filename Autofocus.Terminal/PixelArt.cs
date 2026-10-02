@@ -1,27 +1,29 @@
 ﻿using Autofocus.Config;
-using Autofocus.ImageSharp.Extensions;
-using SixLabors.ImageSharp;
+using Autofocus.PixelArt;
+using ImageMagick;
+using ImageMagick.Factories;
 
 namespace Autofocus.Terminal;
 
 public class PixelArt
 {
-    public async Task Run()
+    public async Task Run(IStableDiffusion api)
     {
-        var api = new StableDiffusion();
         await api.Ping();
 
         var model = await api.StableDiffusionModel("prefectPonyXL_v50");
         var sampler = await api.Sampler("UniPC");
 
+        var prompt = new PromptConfig
+        {
+            Positive = "rating_safe, score_9, score_8_up, score_7_up, 1girl, expressionless, looking at viewer",
+            Negative = "easynegative, score_6, score_5, score_4, 1boy",
+        };
+        
         var initialImage = (await api.TextToImage(new()
         {
-            Prompt = new()
-            {
-                Positive = "rating_safe, score_9, score_8_up, score_7_up, (Pixellated, Pixel Art), mountains, trees, birds, sky, clouds, landscape",
-                Negative = "easynegative, score_6, score_5, score_4, 1girl, 1boy, people",
-            },
-            Seed = 4321,
+            Prompt = prompt,
+            Seed = 1234,
             Sampler = new()
             {
                 Sampler = sampler,
@@ -33,24 +35,20 @@ public class PixelArt
             BatchSize = 1,
         })).Images[0];
 
-        var pixellator = new Autofocus.PixelArt.PixelArt(api, model, sampler);
-        var result = await pixellator.Image2Image(new Autofocus.PixelArt.PixelArt.Config()
+        var result = await initialImage.PixelArt(
+            new PixelArtConfig
             {
-                Denoising = 0.25,
-                Rounds = 1,
                 MaxColors = 128,
+                Strength = PixelArtStrength.VeryHigh
             },
-            prompt: new PromptConfig
-            {
-                Positive = "((Pixellated, Pixel Art)), mountains, trees, birds, sky, clouds, landscape",
-                Negative = "easynegative, 1girl, 1boy, people",
-            },
-            seed: 4321,
-            initialImage,
-            progressCallback: _ => { }
+            new MagickImageFactory()
         );
 
-        await (await initialImage.ToImageSharpAsync()).SaveAsJpegAsync("Start.jpeg");
-        await result.SaveAsJpegAsync("End.jpeg");
+        await using (var fs = File.OpenWrite("Start.png"))
+            await result.WriteAsync(fs, MagickFormat.Png);
+        await using (var fe = File.OpenWrite("End.png"))
+            await result.WriteAsync(fe);
+        
+        RaylibHelpers.ShowPng("End.png");
     }
 }

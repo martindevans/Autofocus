@@ -7,13 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.17.2" />
     <PackageReference Include="Magick.NET.Core" Version="14.17.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Autofocus.ImageMagick\Autofocus.ImageMagick.csproj" />
-    <ProjectReference Include="..\Autofocus.ImageSharp\Autofocus.ImageSharp.csproj" />
     <ProjectReference Include="..\Autofocus\Autofocus.csproj" />
   </ItemGroup>
 

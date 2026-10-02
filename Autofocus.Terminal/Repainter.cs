@@ -71,14 +71,14 @@ public class Repainter
             {
                 ctx.Draw(
                     new SolidPen(Color.Red, 3),
-                    result.Bounds
+                    result.Bounds.ToImageSharp()
                 );
 
                 if (result.LeftEye.HasValue)
                 {
                     ctx.Fill(
                         Color.LimeGreen,
-                        new EllipsePolygon(result.LeftEye.Value, result.GetEyeRadius())
+                        new EllipsePolygon(result.LeftEye.Value.ToImageSharp(), result.GetEyeRadius())
                     );
                 }
 
@@ -86,7 +86,7 @@ public class Repainter
                 {
                     ctx.Fill(
                         Color.LimeGreen,
-                        new EllipsePolygon(result.RightEye.Value, result.GetEyeRadius())
+                        new EllipsePolygon(result.RightEye.Value.ToImageSharp(), result.GetEyeRadius())
                     );
                 }
             }
