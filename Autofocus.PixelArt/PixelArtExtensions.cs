@@ -7,14 +7,14 @@ namespace Autofocus.PixelArt;
 public static class PixelArtExtensions
 {
     public static async Task<IMagickImage<Q>> PixelArt<Q>(this Base64EncodedImage input, PixelArtConfig config, IMagickImageFactory<Q> factory)
-        where Q : struct, IConvertible
+        where Q : unmanaged, IConvertible
     {
         using var inputImage = await input.ToMagickImageAsync(factory);
         return await inputImage.PixelArt(config);
     }
 
     public static async Task<IMagickImage<Q>> PixelArt<Q>(this IMagickImage<Q> magick, PixelArtConfig config)
-        where Q : struct, IConvertible
+        where Q : unmanaged, IConvertible
     {
         var w = magick.Width;
         var h = magick.Height;
