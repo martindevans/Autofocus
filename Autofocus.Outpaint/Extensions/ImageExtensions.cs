@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 
 namespace Autofocus.Outpaint.Extensions
 {
@@ -40,6 +41,46 @@ namespace Autofocus.Outpaint.Extensions
                     );
 
                     image[i, j] = new Rgba32(selectedPixel);
+                }
+            }
+        }
+
+        public static void Bleed(this SKBitmap image, Rectangle from, int radius, int? seed, float angleFactor = 0.5f)
+        {
+            var rng = new Random(seed ?? RandomNumberGenerator.GetInt32(int.MaxValue));
+
+            for (var i = 0; i < image.Width; i++)
+            {
+                for (var j = 0; j < image.Height; j++)
+                {
+                    if (from.Contains(i, j))
+                        continue;
+
+                    // Get the distance to the closest point on the rectangle
+                    var closestPoint = from.ClosestPoint(i, j).ToVector2();
+                    var distance = Vector2.Distance(new Vector2(i, j), closestPoint);
+
+                    // Select another nearby point on the rectangle border (more randomness with distance)
+                    var nearbyPoint = from.ClosestPoint(new Point(
+                        i + (int)(rng.NextSingle(-distance, distance) * angleFactor),
+                        j + (int)(rng.NextSingle(-distance, distance) * angleFactor)
+                    ));
+
+                    var selectedPixelSk = image.GetPixel(nearbyPoint.X, nearbyPoint.Y);
+                    var selectedPixel = new Vector4(selectedPixelSk.Red, selectedPixelSk.Green, selectedPixelSk.Blue, selectedPixelSk.Alpha) / 255;
+
+                    // Randomize colour slightly (based on distance). Once the distance is > radius this add 100% randomisation.
+                    // Note that even then the colour is still biased by the base colour.
+                    var distanceFactor = Math.Clamp(distance / radius, 0, 1);
+                    selectedPixel += new Vector4(
+                        rng.NextSingle(-1f, 1f) * distanceFactor,
+                        rng.NextSingle(-1f, 1f) * distanceFactor,
+                        rng.NextSingle(-1f, 1f) * distanceFactor,
+                        0
+                    );
+
+                    selectedPixel *= 255;
+                    image.SetPixel(i, j, new SKColor((byte)selectedPixel.X, (byte)selectedPixel.Y, (byte)selectedPixel.Z, (byte)selectedPixel.W));
                 }
             }
         }
